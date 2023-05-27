@@ -9,12 +9,20 @@
 	let loading = false;
 
 	const add = (e: CustomEvent) => {
+		if (!$page.data.session?.user) {
+			return goto('/auth');
+		}
 		loading = true;
 		axios
 			.post('/embedding', e.detail)
 			.then(async ({ data: embedding }) => {
 				await axios
-					.post('/add', { ...e.detail, embedding, user: $page.data.session.user.email, created: new Date() })
+					.post('/add', {
+						...e.detail,
+						embedding,
+						user: $page.data.session.user.email,
+						created: new Date()
+					})
 					.then((r) => goto(`${r.data.insertedId}`))
 					.catch((e) => notify(`Error encountered ${e}`));
 			})
