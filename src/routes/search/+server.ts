@@ -3,7 +3,9 @@ import type { RequestHandler } from './$types';
 import { search } from '$lib/util/search';
 
 export const POST = (async ({ request }) => {
+	const results = await search(await request.json())
+	
 	return json(
-		search(await request.json()).toArray()
+		results.toArray()
 	);
 }) satisfies RequestHandler;

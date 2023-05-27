@@ -18,7 +18,7 @@
 	};
 </script>
 
-{#if $page.session.user === post.user}
+{#if $page.session?.user === post.user}
 	<ButtonSet>
 		<Button on:click={() => goto(`${post.id}/edit`)} iconDescription="Edit" icon={Edit} />
 	</ButtonSet>

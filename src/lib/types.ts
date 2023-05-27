@@ -1,3 +1,5 @@
+import type { ObjectId } from "mongodb";
+
 type Outcome = 'accepted' | 'dismissed';
 export interface BeforeInstallPromptEvent extends Event {
 	readonly platforms: string[];
@@ -8,12 +10,12 @@ export interface BeforeInstallPromptEvent extends Event {
 	}>;
 }
 export interface Post {
+	_id: ObjectId;
 	created: Date;
 	last_modified: Date;
 	user: string;
 	name: string;
 	body: string;
-	id: string;
 	embedding: Embedding;
 }
 
