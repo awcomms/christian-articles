@@ -1,6 +1,6 @@
-import { count } from '$lib/util/count.js';
+import { collections } from '$lib/util/mongodb';
 import { text } from '@sveltejs/kit';
 
 export const GET = async () => {
-	return text((await count()).toString());
+	return text(String(await collections.posts.countDocuments()));
 };

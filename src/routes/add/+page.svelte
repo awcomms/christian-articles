@@ -1,11 +1,29 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import Edit from '$lib/components/Edit.svelte';
+	import { notify } from '$lib/util/notify';
 	import axios from 'axios';
+	import { InlineLoading } from 'carbon-components-svelte';
 
-	const add = async (e: CustomEvent) => {
-		await axios.post('/add', e.detail).then((r) => goto(`${r.data.insertedId}`));
+	let loading = false;
+
+	const add = (e: CustomEvent) => {
+		loading = true;
+		axios
+			.post('/embedding', e.detail)
+			.then(async ({ data: embedding }) => {
+				await axios
+					.post('/add', { ...e.detail, embedding, user: $page.data.session.user.email, created: new Date() })
+					.then((r) => goto(`${r.data.insertedId}`))
+					.catch((e) => notify(`Error encountered ${e}`));
+			})
+			.catch((e) => notify(`Error encountered ${e}`))
+			.finally(() => (loading = false));
 	};
 </script>
 
-<Edit on:save={add} />
+{#if loading}
+	<InlineLoading />
+{/if}
+<Edit disabled={loading} on:accept={add} />

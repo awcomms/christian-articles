@@ -1,9 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { search } from '$lib/util/search';
+import { find } from '$lib/util/find';
 
 export const POST = (async ({ request }) => {
-	return json(
-		search(await request.json()).toArray()
-	);
+	return json(find(await request.json()));
 }) satisfies RequestHandler;

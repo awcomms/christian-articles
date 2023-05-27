@@ -1,19 +1,39 @@
 <script lang="ts">
-	import { Tab, TabContent } from 'carbon-components-svelte';
+	export let post: Pick<Post, 'id' | 'name' | 'body' | 'user' | 'created' | 'last_modified'>;
+
+	import { Button, ButtonSet, CopyButton, Tab, TabContent } from 'carbon-components-svelte';
 	import type { Post } from '$lib/types';
 	import PostsPagination from './PostsPagination.svelte';
 	import axios from 'axios';
+	import { goto } from '$app/navigation';
+	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
+	import { page } from '$app/stores';
 
-	export let post: Pick<Post, 'id' | 'name' | 'body'>;
+	let current_page: number, posts: Post[];
 
-	let page: number, posts: Post[];
-
-	$: get(page);
+	$: get(current_page);
 
 	const get = async (page: number) => {
 		posts = await axios.post('/similar_posts', { id: post.id, page });
 	};
 </script>
+
+{#if $page.session.user === post.user}
+	<ButtonSet>
+		<Button on:click={() => goto(`${post.id}/edit`)} iconDescription="Edit" icon={Edit} />
+	</ButtonSet>
+{/if}
+
+<div>
+	<p>Created: {post.created.toLocaleString}</p>
+	<p>Last Modified: {post.last_modified.toLocaleString}</p>
+</div>
+
+<CopyButton
+	feedback="The link to this post has been copied to the clipboard"
+	text={`${$page.url}`}
+	iconDescription="Copy the link to this post"
+/>
 
 <Tab>
 	<TabContent title="Post">
@@ -22,6 +42,6 @@
 	</TabContent>
 
 	<TabContent title="Similar Posts">
-		<PostsPagination {posts} {page} />
+		<PostsPagination {posts} page={current_page} />
 	</TabContent>
 </Tab>

@@ -1,6 +1,13 @@
-import { MONGO_AUTH } from "$env/static/private";
-import { MongoClient } from "mongodb";
+import { MONGO_USER_PASSWORD } from '$env/static/private';
+import type { Post } from '$lib/types';
+import { MongoClient } from 'mongodb';
 
-const uri = `mongodb+srv://${MONGO_AUTH}@call.arg4uux.mongodb.net/?retryWrites=true&w=majority`;
+const client = new MongoClient(`mongodb+srv://gold67379:${MONGO_USER_PASSWORD}@call.arg4uux.mongodb.net/`);
+export const connectPromise = client.connect().catch(console.error);
+const db = client.db('call');
 
-export const client = new MongoClient(uri)
+const posts = db.collection<Post>('posts');
+
+export { client, db };
+
+export const collections = { posts };

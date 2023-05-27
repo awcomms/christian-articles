@@ -1,9 +1,9 @@
 import cosine_similarity from 'compute-cosine-similarity';
 import type { Embedding } from '$lib/types';
-import { collection } from '$lib/collection';
+import { collections } from './mongodb';
 
-export const search = (embedding: Embedding) => {
-	return collection.aggregate([
+export const search = async(embedding: Embedding) => {
+	return await collections.posts.aggregate([
 		{
 			$addFields: {
 				cosine_similarity: {
