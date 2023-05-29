@@ -23,7 +23,7 @@
 			})
 			.then(async (r) => {
 				console.log(r.data);
-				await goto(`/${r.data}`);
+				goto(`/${r.data}`);
 			})
 			.catch((e) => notify(`Error encountered ${e}`))
 			.finally(() => (loading = false));

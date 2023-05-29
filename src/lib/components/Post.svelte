@@ -1,10 +1,10 @@
 <script lang="ts">
-	export let post: PostEntry
+	export let id: string, post: Post
 
 	import { Button, ButtonSet, CopyButton, Tab, TabContent } from 'carbon-components-svelte';
-	import type { Post, PostEntry } from '$lib/types';
-	import PostsPagination from './PostsPagination.svelte';
-	import axios from 'axios';
+	import type { Post } from '$lib/types';
+	// import PostsPagination from './PostsPagination.svelte';
+	// import axios from 'axios';
 	import { goto } from '$app/navigation';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 	import { page } from '$app/stores';
@@ -18,9 +18,9 @@
 	// };
 </script>
 
-{#if $page.data.session?.user === post.value.user}
+{#if $page.data.session?.user === post.user}
 	<ButtonSet>
-		<Button on:click={() => goto(`${post.id}/edit`)} iconDescription="Edit" icon={Edit} />
+		<Button on:click={() => goto(`${id}/edit`)} iconDescription="Edit" icon={Edit} />
 	</ButtonSet>
 {/if}
 
@@ -37,8 +37,8 @@
 
 <!-- <Tab> -->
 	<!-- <TabContent title="Post"> -->
-		<h2>{post.value.name}</h2>
-		<p>{post.value.body}</p>
+		<h2>{post.name}</h2>
+		<p>{post.body}</p>
 	<!-- </TabContent> -->
 
 	<!-- <TabContent title="Similar Posts">

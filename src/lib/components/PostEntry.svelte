@@ -9,7 +9,7 @@
 </script>
 
 <Modal hasScrollingContent bind:open passiveModal>
-	<Post {post} />
+	<Post id={post.id} post={post.value} />
 </Modal>
 
 <div class="post">
