@@ -56,7 +56,7 @@
 		<HeaderAction icon={UserAvatarFilledAlt} closeIcon={UserAvatarFilledAlt}>
 			<HeaderPanelLinks>
 				{#if $page.data.session?.user}
-					<HeaderPanelLink on:click={() => signOut()}>Sign out</HeaderPanelLink>
+					<HeaderPanelLink on:click={() => signOut()}>Log out: {$page.data.session.user.email}</HeaderPanelLink>
 				{:else}
 					<HeaderPanelLink on:click={() => signIn('google')}>Sign in with Google</HeaderPanelLink>
 				{/if}
