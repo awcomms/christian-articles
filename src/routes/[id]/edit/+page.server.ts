@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!session || !session.user) {
 		throw redirect(303, '/auth');
 	}
-	if (session.user.email !== post.user) {
+	if (session.user.email !== post.user.email) {
 		throw error(401, `Logged in user is not authorized to access this page`);
 	}
 	return {

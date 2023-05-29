@@ -18,7 +18,7 @@
 		await axios
 			.post('/add', {
 				...e.detail,
-				user: $page.data.session.user.email,
+				user: {email: $page.data.session.user.email, name: $page.data.session.user.name},
 				created: Date.now()
 			})
 			.then(async (r) => {

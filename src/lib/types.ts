@@ -1,4 +1,4 @@
-import type { ObjectId } from 'mongodb';
+import type { GoogleProfile } from '@auth/core/providers/google';
 
 type Outcome = 'accepted' | 'dismissed';
 export interface BeforeInstallPromptEvent extends Event {
@@ -12,14 +12,14 @@ export interface BeforeInstallPromptEvent extends Event {
 export interface Post {
 	created: Date;
 	last_modified: Date;
-	user: string;
+	user: Pick<GoogleProfile, 'name' | 'email'>;
 	name: string;
 	body: string;
 }
 
 export interface PostEntry {
-	id: string,
-	value: Post
+	id: string;
+	value: Post;
 }
 
 export type V = number[];
