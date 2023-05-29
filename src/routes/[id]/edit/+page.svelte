@@ -11,10 +11,10 @@
 	const edit = (e: CustomEvent) => {
 		loading = true;
 		axios
-			.post('/embedding', e.detail)
-			.then(async ({ data: embedding }) => {
+			.post('/v', e.detail)
+			.then(async ({ data: v }) => {
 				await axios
-					.post('/edit', { ...e.detail, embedding, last_modified: new Date() })
+					.post('/edit', { ...e.detail, v, last_modified: new Date() })
 					.then((r) => notify('Edit saved'))
 					.catch((e) => notify(`Error encountered ${e}`));
 			})

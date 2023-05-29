@@ -14,12 +14,12 @@
 		}
 		loading = true;
 		axios
-			.post('/embedding', e.detail)
-			.then(async ({ data: embedding }) => {
+			.post('/v', e.detail)
+			.then(async ({ data: v }) => {
 				await axios
 					.post('/add', {
 						...e.detail,
-						embedding,
+						v,
 						user: $page.data.session.user.email,
 						created: new Date()
 					})

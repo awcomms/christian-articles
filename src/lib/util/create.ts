@@ -1,6 +1,18 @@
-import { ids_hash } from "$lib/constants"
-import { client } from "./redis"
+import { embedding_model, ids_hash } from '$lib/constants';
+import { openai } from './openai';
+import { client, float32Buffer } from './redis';
 
-export const create = (index: string, data: object) => {
-    let id = client.hGet(ids_hash, index)
-}
+const build_id = (index: string, id: number) => `${index}:${id}`;
+
+export const v_blob = async (data: object) => {
+	const v = (await openai.createEmbedding({ model: embedding_model, input: JSON.stringify(data) }))
+		.data.data[0].embedding;
+	const blob = float32Buffer(v);
+	data.v = blob;
+	return data;
+};
+
+export const create = async ({ index, data }: { index: string; data: object }) => {
+	const id = await client.hIncrBy(ids_hash, index, 1);
+	await client.hSet(build_id(index, id), { ... await v_blob(data) });
+};

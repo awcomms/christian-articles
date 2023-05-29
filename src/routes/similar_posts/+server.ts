@@ -11,7 +11,7 @@ export const POST = (async ({ request }) => {
 	if (!result) {
 		throw error(404, `Post ${_id} not found`);
 	}
-	const results = await search(result.embedding);
+	const results = await search(result.v);
 	return json(
 		results
 			.skip(page > 1 ? (page - 1) * 7 : 0)

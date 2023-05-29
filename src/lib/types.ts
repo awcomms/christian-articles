@@ -1,4 +1,4 @@
-import type { ObjectId } from "mongodb";
+import type { ObjectId } from 'mongodb';
 
 type Outcome = 'accepted' | 'dismissed';
 export interface BeforeInstallPromptEvent extends Event {
@@ -16,7 +16,7 @@ export interface Post {
 	user: string;
 	name: string;
 	body: string;
-	embedding: Embedding;
+	v: Embedding;
 }
 
 export type Embedding = number[];

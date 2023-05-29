@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { collections } from '$lib/util/mongodb';
+import { create } from '$lib/util/create';
 
 export const POST = (async ({ request }) => {
-	return json(await collections.posts.insertOne(await request.json()));
+	return json(await create(await request.json()));
 }) satisfies RequestHandler;

@@ -5,13 +5,13 @@
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import axios from 'axios';
 
-	export let embedding: Embedding;
+	export let v: Embedding;
 
 	let value: string, posts: Post[], page: number;
 
 	const get = async () => {
 		posts = await axios
-			.post('/search', embedding)
+			.post('/search', v)
 			.then((r) => r.data)
 			.catch(() => alert('Error encountered getting results'));
 	};
