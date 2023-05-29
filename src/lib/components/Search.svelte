@@ -8,7 +8,7 @@
 	import axios from 'axios';
 	import { notify } from '$lib/util/notify';
 
-	let input: string, posts: PostEntry[] = [], page: number;
+	let input: string, posts: PostEntry[] = [], page: number = 1;
 
 	$: get(page);
 

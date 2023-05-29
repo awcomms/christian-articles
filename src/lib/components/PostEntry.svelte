@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PostEntry } from '$lib/types';
-	import { Modal, Button, ButtonSet } from 'carbon-components-svelte';
+	import { Modal, Button, ButtonSet, Link } from 'carbon-components-svelte';
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import Post from './Post.svelte';
@@ -19,13 +19,19 @@
 </Modal>
 
 <div class="post">
-	<p>{post.value.name}</p>
+	<Link href="/{post.id}">{post.value.name}</Link>
 	<div class="after">
 		<ButtonSet>
 			<slot name="buttons" />
-			<Button on:click={() => (open = true)} icon={View} iconDescription="View post details" />
+			<Button
+				kind="ghost"
+				on:click={() => (open = true)}
+				icon={View}
+				iconDescription="View post details"
+			/>
 			{#if $page.data.sesssion?.user.email === post.value.user}
 				<Button
+					kind="ghost"
 					icon={TrashCan}
 					on:click={async () => await client_delete(post.id).then(() => dispatch('del'))}
 				/>

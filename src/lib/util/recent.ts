@@ -12,9 +12,9 @@ export const recent = async <Type>({
 			BY: 'created',
 			DIRECTION: 'DESC'
 		},
-		LIMIT: { from, size: 21 },
+		// LIMIT: { from, size: 21 },
 		RETURN: ['name', 'body', 'user', 'id'],
-		DIALECT: 2
+		// DIALECT: 2
 	});
 	console.log(results)
 	return results.documents;

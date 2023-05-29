@@ -12,7 +12,8 @@
 	<Column>
 		<div class="all">
 			<Button href="/add" icon={Add}>Add an article</Button>
-			<Tabs>
+			<PostsPagination page={current_page} totalItems={data.totalItems} posts={data.posts} />
+			<!-- <Tabs>
 				<Tab label="Most Recent" />
 				<Tab label="Search" />
 				<svelte:fragment slot="content">
@@ -23,7 +24,7 @@
 						<Search totalItems={data.totalItems} />
 					</TabContent>
 				</svelte:fragment>
-			</Tabs>
+			</Tabs> -->
 		</div>
 	</Column>
 </Row>

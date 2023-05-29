@@ -13,9 +13,7 @@ export const v_blob = async (data: object) => {
 		.catch((e) => {
 			throw `OpenAI Embeddings error: ${e}`;
 		});
-	console.log('_v', v);
 	const blob = float32Buffer(v);
-	console.log(data);
 	return { v: blob, ...data };
 };
 

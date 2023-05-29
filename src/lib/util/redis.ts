@@ -1,3 +1,4 @@
+import { posts_index_name } from '$lib/constants';
 import type { V } from '$lib/types';
 import { SchemaFieldTypes, VectorAlgorithms, createClient } from 'redis';
 
@@ -17,7 +18,7 @@ export const float32Buffer = (arr: V): Buffer => {
 
 try {
 	await client.ft.create(
-		'post',
+		posts_index_name,
 		{
 			v: {
 				type: SchemaFieldTypes.VECTOR,
@@ -38,7 +39,7 @@ try {
 			// }
 		},
 		{
-			PREFIX: 'post'
+			PREFIX: posts_index_name
 		}
 	);
 } catch (e) {

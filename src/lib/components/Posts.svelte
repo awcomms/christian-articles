@@ -12,7 +12,7 @@
 	<PostEntry {post}>
 		<div slot="buttons">
 			{#if $page.data.session?.user?.email === post.value.user}
-				<Button href={`/${post.id}/edit`} iconDescription="Edit" icon={Edit} />
+				<Button kind="ghost" href={`/${post.id}/edit`} iconDescription="Edit" icon={Edit} />
 			{/if}
 		</div>
 	</PostEntry>
