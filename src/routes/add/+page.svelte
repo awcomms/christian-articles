@@ -8,23 +8,22 @@
 
 	let loading = false;
 
-	const add = (e: CustomEvent) => {
-		if (!$page.data.session?.user?.email) {
-			return goto('/auth');
+	const add = async (e: CustomEvent) => {
+		if (!$page.data.session || !$page.data.session.user) {
+			goto('/auth');
+			return;
 		}
 		loading = true;
-		axios
-			.post('/v', e.detail)
-			.then(async ({ data: v }) => {
-				await axios
-					.post('/add', {
-						...e.detail,
-						v,
-						user: $page.data.session.user.email,
-						created: new Date()
-					})
-					.then((r) => goto(`${r.data.insertedId}`))
-					.catch((e) => notify(`Error encountered ${e}`));
+		console.log($page.data.session.user);
+		await axios
+			.post('/add', {
+				...e.detail,
+				user: $page.data.session.user.email,
+				created: Date.now()
+			})
+			.then(async (r) => {
+				console.log(r.data);
+				await goto(`/${r.data}`);
 			})
 			.catch((e) => notify(`Error encountered ${e}`))
 			.finally(() => (loading = false));

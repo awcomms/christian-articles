@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { TextInput, Button } from 'carbon-components-svelte';
-	import type { Embedding, Post } from '$lib/types';
+	import type { V, Post } from '$lib/types';
 	import PostsPagination from './PostsPagination.svelte';
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import axios from 'axios';
 
-	export let v: Embedding;
+	export let v: V;
 
 	let value: string, posts: Post[], page: number;
 

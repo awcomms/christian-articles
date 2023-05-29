@@ -20,7 +20,12 @@
 	$: icon = $theme === 'g100' ? Sun : Moon;
 </script>
 
-<Header persistentHamburgerMenu={true} platformName="Articles" bind:isSideNavOpen={$isSideNavOpen} href="/">
+<Header
+	persistentHamburgerMenu={true}
+	platformName="Articles"
+	bind:isSideNavOpen={$isSideNavOpen}
+	href="/"
+>
 	{#if $navigating}
 		<InlineLoading />
 	{/if}
@@ -28,6 +33,14 @@
 		<SkipToContent />
 	</svelte:fragment>
 	<HeaderUtilities>
+		<a
+			href={PUBLIC_PROJECT_GITHUB_REPOSITORY}
+			rel="noopener noreferrer"
+			target="_blank"
+			class="bx--header__action logo"
+		>
+			<LogoGithub size={20} />
+		</a>
 		<HeaderAction
 			on:click={(e) => {
 				$theme = $theme === 'g100' ? 'white' : 'g100';

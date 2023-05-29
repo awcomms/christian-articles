@@ -11,11 +11,11 @@
 
 	let current_page: number, posts: Post[];
 
-	$: get(current_page);
+	// $: get(current_page);
 
-	const get = async (page: number) => {
-		posts = await axios.post('/similar_posts', { id: post._id, page });
-	};
+	// const get = async (page: number) => {
+	// 	posts = await axios.post('/similar_posts', { id: post._id, page });
+	// };
 </script>
 
 {#if $page.data.session?.user === post.user}
@@ -24,10 +24,10 @@
 	</ButtonSet>
 {/if}
 
-<div>
+<!-- <div>
 	<p>Created: {post.created.toLocaleString}</p>
 	<p>Last Modified: {post.last_modified.toLocaleString}</p>
-</div>
+</div> -->
 
 <CopyButton
 	feedback="The link to this post has been copied to the clipboard"
@@ -35,13 +35,13 @@
 	iconDescription="Copy the link to this post"
 />
 
-<Tab>
-	<TabContent title="Post">
+<!-- <Tab> -->
+	<!-- <TabContent title="Post"> -->
 		<h2>{post.name}</h2>
 		<p>{post.body}</p>
-	</TabContent>
+	<!-- </TabContent> -->
 
-	<TabContent title="Similar Posts">
+	<!-- <TabContent title="Similar Posts">
 		<PostsPagination {posts} page={current_page} />
-	</TabContent>
-</Tab>
+	</TabContent> -->
+<!-- </Tab> -->

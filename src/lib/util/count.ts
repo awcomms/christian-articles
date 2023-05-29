@@ -1,15 +1,4 @@
-// import { collection } from './collection';
-import { client } from './mongodb';
+import { client } from './redis';
 
-export const count = async () => {
-		const c = await client;
-	try {
-		const db = c.db('call');
-		const articles = db.collection('articles');
-		const results = await articles.countDocuments();
-		return results;
-	} catch (e) {
-        console.log('mongodb error', e);
-        c.close()
-	}
-};
+export const count = (index: string): Promise<string> =>
+	client.ft.info(index).then((r) => r.numDocs);

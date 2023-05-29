@@ -1,4 +1,4 @@
-import type { Embedding } from '$lib/types';
+import type { V } from '$lib/types';
 import { SchemaFieldTypes, VectorAlgorithms, createClient } from 'redis';
 
 export const client = createClient({
@@ -11,13 +11,13 @@ export const client = createClient({
 
 await client.connect();
 
-export const float32Buffer = (arr: Embedding): Buffer => {
+export const float32Buffer = (arr: V): Buffer => {
 	return Buffer.from(new Float32Array(arr).buffer);
 };
 
 try {
 	await client.ft.create(
-		'posts',
+		'post',
 		{
 			v: {
 				type: SchemaFieldTypes.VECTOR,
@@ -25,6 +25,16 @@ try {
 				TYPE: 'FLOAT32',
 				DIM: 1536,
 				DISTANCE_METRIC: 'COSINE'
+			},
+			created: {
+				type: SchemaFieldTypes.NUMERIC,
+				SORTABLE: true,
+				NOINDEX: true
+			},
+			last_modified: {
+				type: SchemaFieldTypes.NUMERIC,
+				SORTABLE: true,
+				NOINDEX: true
 			}
 		},
 		{

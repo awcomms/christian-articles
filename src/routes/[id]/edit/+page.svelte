@@ -8,16 +8,11 @@
 
 	let loading = false;
 
-	const edit = (e: CustomEvent) => {
+	const edit = async (e: CustomEvent) => {
 		loading = true;
-		axios
-			.post('/v', e.detail)
-			.then(async ({ data: v }) => {
-				await axios
-					.post('/edit', { ...e.detail, v, last_modified: new Date() })
-					.then((r) => notify('Edit saved'))
-					.catch((e) => notify(`Error encountered ${e}`));
-			})
+		await axios
+			.post('/edit', { id: data.id, data: { ...e.detail, last_modified: Date.now() } })
+			.then((r) => notify('Edit saved'))
 			.catch((e) => notify(`Error encountered ${e}`))
 			.finally(() => (loading = false));
 	};

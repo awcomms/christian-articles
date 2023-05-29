@@ -1,6 +1,5 @@
-import { collections } from '$lib/util/mongodb';
-import { text } from '@sveltejs/kit';
+import { text } from "@sveltejs/kit";
+import type { RequestHandler } from "./$types";
+import { count } from "$lib/util/count";
 
-export const GET = async () => {
-	return text(String(await collections.posts.countDocuments()));
-};
+export const GET: RequestHandler = async() => text(await count('posts'))

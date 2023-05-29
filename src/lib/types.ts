@@ -9,14 +9,17 @@ export interface BeforeInstallPromptEvent extends Event {
 		platform: string;
 	}>;
 }
-export interface Post {
+export interface Post extends HasV {
 	_id: ObjectId;
 	created: Date;
 	last_modified: Date;
 	user: string;
 	name: string;
 	body: string;
-	v: Embedding;
 }
 
-export type Embedding = number[];
+export type V = number[];
+
+export interface HasV {
+	v: V
+}

@@ -1,14 +1,11 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { collections } from '$lib/util/mongodb';
-import { ObjectId } from 'mongodb';
+import { get } from '$lib/util/get';
+import type { Post } from '$lib/types';
 
-export const load = (async ({ params, locals }) => {
-	const _id = new ObjectId(params.id)
-	const post = await collections.posts.findOne({ _id }).then((r) => {
-		if (!r) throw error(404, `Post ${params.id} not found`);
-		return r;
-	});
+export const load: PageServerLoad = async ({ params, locals }) => {
+	const post = await get<Post>(params.id);
+	if (!post) throw error(404, `${params.id} not found`);
 	const session = await locals.getSession();
 	if (!session || !session.user) {
 		throw redirect(303, '/auth');
@@ -17,6 +14,7 @@ export const load = (async ({ params, locals }) => {
 		throw error(401, `Logged in user is not authorized to access this page`);
 	}
 	return {
+		id: params.id,
 		post
 	};
-}) satisfies PageServerLoad;
+};
