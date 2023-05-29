@@ -2,7 +2,7 @@
 	import { Content, Grid, Theme } from 'carbon-components-svelte';
 	import 'carbon-components-svelte/css/all.css';
 	import { browser } from '$app/environment';
-	import { Header } from '$lib/components/Nav';
+	import { Header, SideNav } from '$lib/components/Nav';
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
 	import { inject } from '@vercel/analytics';
@@ -25,6 +25,7 @@
 <Theme persist persistKey={theme_key} theme={$theme} />
 <Header />
 <Content style="background: none; padding: 4rem 1rem 0 1rem; height: 100%">
+	<SideNav />
 	<Grid>
 		<slot />
 	</Grid>

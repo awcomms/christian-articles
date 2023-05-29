@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let post: Pick<Post, 'id' | 'name' | 'body' | 'user' | 'created' | 'last_modified'>;
+	export let post: Pick<Post, '_id' | 'name' | 'body' | 'user' | 'created' | 'last_modified'>;
 
 	import { Button, ButtonSet, CopyButton, Tab, TabContent } from 'carbon-components-svelte';
 	import type { Post } from '$lib/types';
@@ -14,13 +14,13 @@
 	$: get(current_page);
 
 	const get = async (page: number) => {
-		posts = await axios.post('/similar_posts', { id: post.id, page });
+		posts = await axios.post('/similar_posts', { id: post._id, page });
 	};
 </script>
 
-{#if $page.session?.user === post.user}
+{#if $page.data.session?.user === post.user}
 	<ButtonSet>
-		<Button on:click={() => goto(`${post.id}/edit`)} iconDescription="Edit" icon={Edit} />
+		<Button on:click={() => goto(`${post._id}/edit`)} iconDescription="Edit" icon={Edit} />
 	</ButtonSet>
 {/if}
 

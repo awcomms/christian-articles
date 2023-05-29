@@ -9,6 +9,7 @@
 
 <SideNav bind:isOpen={$isSideNavOpen}>
 	<SideNavItems>
+		<SideNavLink text="Add" />
 		<A2HsLink />
 	</SideNavItems>
 </SideNav>

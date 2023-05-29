@@ -1,11 +1,11 @@
-import type { Post } from '$lib/types';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { not_owner } from '$lib/util/not_owner';
 import { collections } from '$lib/util/mongodb';
+import { ObjectId } from 'mongodb';
 
 export const load = (async ({ params, locals }) => {
-	const post = await collections.posts.findOne({ _id: params.id }).then((r) => {
+	const _id = new ObjectId(params.id)
+	const post = await collections.posts.findOne({ _id }).then((r) => {
 		if (!r) throw error(404, `Post ${params.id} not found`);
 		return r;
 	});
@@ -14,7 +14,7 @@ export const load = (async ({ params, locals }) => {
 		throw redirect(303, '/auth');
 	}
 	if (session.user.email !== post.user) {
-		throw error(401, not_owner(params.id));
+		throw error(401, `Logged in user is not authorized to access this page`);
 	}
 	return {
 		post

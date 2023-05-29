@@ -9,7 +9,7 @@
 	let loading = false;
 
 	const add = (e: CustomEvent) => {
-		if (!$page.data.session?.user) {
+		if (!$page.data.session?.user?.email) {
 			return goto('/auth');
 		}
 		loading = true;

@@ -19,4 +19,4 @@ export interface Post {
 	embedding: Embedding;
 }
 
-export type Embedding = Array<number>;
+export type Embedding = number[];

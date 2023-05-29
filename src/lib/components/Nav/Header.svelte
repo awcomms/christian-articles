@@ -20,7 +20,7 @@
 	$: icon = $theme === 'g100' ? Sun : Moon;
 </script>
 
-<Header persistentHamburgerMenu={true} company="Quiz" bind:isSideNavOpen={$isSideNavOpen} href="/">
+<Header persistentHamburgerMenu={true} platformName="Articles" bind:isSideNavOpen={$isSideNavOpen} href="/">
 	{#if $navigating}
 		<InlineLoading />
 	{/if}
