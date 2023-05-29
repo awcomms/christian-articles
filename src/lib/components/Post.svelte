@@ -12,8 +12,9 @@
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import Share from 'carbon-icons-svelte/lib/Share.svelte';
 	import CopyLinkButton from './CopyLinkButton.svelte';
+	import CuteButton from './CuteButton.svelte';
 
-	let current_page: number, posts: Post[];
+	// let current_page: number, posts: Post[];
 
 	// $: get(current_page);
 
@@ -21,13 +22,6 @@
 	// 	posts = await axios.post('/similar_posts', { id: post._id, page });
 	// };
 </script>
-
-{#if $page.data.session?.user === post.user}
-	<ButtonSet>
-		<Button on:click={() => goto(`${id}/edit`)} iconDescription="Edit" icon={Edit} />
-		<Button icon={TrashCan} on:click={async () => await client_delete(id)} />
-	</ButtonSet>
-{/if}
 
 <!-- <div>
 	<p>Created: {post.created.toLocaleString}</p>
@@ -39,18 +33,32 @@
 <div class="article">
 	<div class="title">
 		<h2>{post.name}</h2>
+		{#if $page.data.session?.user?.email === post.user_email}
+			<CuteButton
+				onclick={async () => goto(`/post/${id}/edit`)}
+				iconDescription="Edit this post"
+				icon={Edit}
+			/>
+			<CuteButton
+				onclick={async () => {
+					await client_delete(id).then((r) => goto('/') /**TODO goto user's posts*/);
+				}}
+				iconDescription="Delete this post"
+				icon={TrashCan}
+			/>
+		{/if}
 		<CopyButton
 			feedback="This post has been copied to the clipboard"
-			text={`${post.name}\nBy ${post.user}\n\n${post.body}`}
+			text={`${post.name}\nBy ${post.user_name}\n\n${post.body}`}
 			iconDescription="Copy this post to the clipboard"
 		/>
-		{#if typeof navigator !== "undefined" && navigator.share && navigator.canShare()}
+		{#if typeof navigator !== 'undefined' && navigator.share && navigator.canShare()}
 			<Button
 				on:click={() =>
 					navigator.share({
 						url: $page.url.toString(),
-						text: `${post.name} by ${post.user}`,
-						title: `${post.name} by ${post.user}`
+						text: `${post.name} by ${post.user_name}`,
+						title: `${post.name} by ${post.user_name}`
 					})}
 				icon={Share}
 				iconDescription="Share this article"
@@ -63,7 +71,7 @@
 			/>
 		{/if}
 	</div>
-	<p>By {post.user}</p>
+	<p>By {post.user_name}</p>
 	<p>{post.body}</p>
 </div>
 

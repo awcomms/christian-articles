@@ -12,7 +12,8 @@ export interface BeforeInstallPromptEvent extends Event {
 export interface Post {
 	created: Date;
 	last_modified: Date;
-	user: Pick<GoogleProfile, 'name' | 'email'>;
+	user_name: string;
+	user_email: string;
 	name: string;
 	body: string;
 }

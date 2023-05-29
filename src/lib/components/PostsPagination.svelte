@@ -8,4 +8,4 @@
 
 <Posts {posts} />
 
-<Pagination pageSizeInputDisabled pageSize={21} {totalItems} {page} />
+<Pagination pageSizeInputDisabled pageSize={7} {totalItems} {page} />

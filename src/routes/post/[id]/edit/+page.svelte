@@ -8,25 +8,35 @@
 
 	export let data: PageData;
 
-	let loading = false;
+	let edit_loading = false,
+		delete_loading = false;
 
 	const del = async () => {
+		delete_loading = true;
 		await client_delete(data.id)
 			.then((r) => {
 				notify(`Post ${data.id} deleted`);
 				goto('/');
 			})
-			.catch((e) => notify(`An error occured: ${e}`));
+			.catch((e) => notify(`An error occured: ${e}`))
+			.finally(() => (delete_loading = false));
 	};
 
 	const edit = async (e: CustomEvent) => {
-		loading = true;
+		edit_loading = true;
 		await axios
-			.post(`/${data.id}/edit`, { id: data.id, data: { ...e.detail, last_modified: Date.now() } })
+			.put(`/post/${data.id}`, { id: data.id, data: { ...e.detail, last_modified: Date.now() } })
 			.then((r) => notify('Edit saved'))
 			.catch((e) => notify(`An error occured: ${e}`))
-			.finally(() => (loading = false));
+			.finally(() => (edit_loading = false));
 	};
 </script>
 
-<Edit id={data.id} disabled={loading} on:delete={del} on:accept={edit} post={data.post} />
+<Edit
+	id={data.id}
+	{edit_loading}
+	{delete_loading}
+	on:delete={del}
+	on:accept={edit}
+	post={data.post}
+/>

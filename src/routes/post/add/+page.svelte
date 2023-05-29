@@ -10,20 +10,22 @@
 
 	const add = async (e: CustomEvent) => {
 		if (!$page.data.session || !$page.data.session.user) {
-			goto('/auth');
+			// goto('/auth');
+			notify(`You are not logged in, Please log in to continue this action`);
 			return;
 		}
 		loading = true;
-		console.log(e.detail, $page.data.session.user);
+		console.log($page.data.session.user);
 		await axios
-			.post('/add', {
+			.post('/post', {
 				...e.detail,
-				user: {email: $page.data.session.user.email, name: $page.data.session.user.name},
+				user_name: $page.data.session.user.name,
+				user_email: $page.data.session.user.email,
 				created: Date.now()
 			})
 			.then(async (r) => {
 				console.log(r.data);
-				goto(`/${r.data}`);
+				goto(`/post/${r.data}`);
 			})
 			.catch((e) => notify(`Error encountered ${e}`))
 			.finally(() => (loading = false));

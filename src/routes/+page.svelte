@@ -11,7 +11,7 @@
 <Row>
 	<Column>
 		<div class="all">
-			<Button href="/add" icon={Add}>Add an article</Button>
+			<Button href="/post/add" icon={Add}>Add an article</Button>
 			<PostsPagination page={current_page} totalItems={data.totalItems} posts={data.posts} />
 			<!-- <Tabs>
 				<Tab label="Most Recent" />

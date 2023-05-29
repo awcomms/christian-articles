@@ -11,8 +11,8 @@
 {#each posts as post}
 	<PostEntry {post}>
 		<div slot="buttons">
-			{#if $page.data.session?.user?.email === post.value.user.email}
-				<Button kind="ghost" href={`/${post.id}/edit`} iconDescription="Edit" icon={Edit} />
+			{#if $page.data.session?.user?.email === post.value.user_email}
+				<Button kind="ghost" href={`/post/${post.id}/edit`} iconDescription="Edit" icon={Edit} />
 			{/if}
 		</div>
 	</PostEntry>

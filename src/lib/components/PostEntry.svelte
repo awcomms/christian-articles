@@ -19,7 +19,7 @@
 </Modal>
 
 <div class="post">
-	<Link href="/{post.id}">{post.value.name}</Link>
+	<Link href="/post/{post.id}">{post.value.name}</Link>
 	<div class="after">
 		<ButtonSet>
 			<slot name="buttons" />
@@ -29,7 +29,7 @@
 				icon={View}
 				iconDescription="View post details"
 			/>
-			{#if $page.data.sesssion?.user.email === post.value.user}
+			{#if $page.data.sesssion?.user.email === post.value.user_email}
 				<Button
 					kind="ghost"
 					icon={TrashCan}
@@ -45,7 +45,6 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1rem;
-		margin-bottom: 1rem;
+		padding: 0.7rem;
 	}
 </style>

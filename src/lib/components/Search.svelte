@@ -15,7 +15,7 @@
 	const get = async (page: number) => {
 		if (!input) return
 		posts = await axios
-			.post('/search', { input, page })
+			.post('/post/search', { input, page })
 			.then((r) => r.data)
 			.catch(() => notify('Error encountered getting results'));
 		console.log('sp', posts)
