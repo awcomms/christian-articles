@@ -13,13 +13,16 @@ export const v_blob = async (data: object) => {
 		.catch((e) => {
 			throw `OpenAI Embeddings error: ${e}`;
 		});
+	console.log('_v', v);
 	const blob = float32Buffer(v);
+	console.log(data);
 	return { v: blob, ...data };
 };
 
 export const create = async ({ index, data }: { index: string; data: object }) => {
+	console.log('create', index, data);
 	const id = await client.hIncrBy(ids_hash, index, 1);
 	const item_id = build_id(index, id);
-	await client.hSet(item_id, { ...(await v_blob(data)) });
-	return item_id
+	await client.hSet(item_id, await v_blob(data));
+	return item_id;
 };

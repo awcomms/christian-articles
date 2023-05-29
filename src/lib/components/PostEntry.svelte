@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Post as _Post } from '$lib/types';
+	import type { PostEntry } from '$lib/types';
 	import { Modal, Button, ButtonSet } from 'carbon-components-svelte';
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import Post from './Post.svelte';
 
-	export let post: _Post;
+	export let post: PostEntry;
 	let open = false;
 </script>
 
@@ -13,7 +13,7 @@
 </Modal>
 
 <div class="post">
-	<p>{post.name}</p>
+	<p>{post.value.name}</p>
 	<div class="after">
 		<ButtonSet>
 			<slot name="buttons" />

@@ -11,7 +11,7 @@
 	const edit = async (e: CustomEvent) => {
 		loading = true;
 		await axios
-			.post('/edit', { id: data.id, data: { ...e.detail, last_modified: Date.now() } })
+			.post(`/${data.id}/edit`, { id: data.id, data: { ...e.detail, last_modified: Date.now() } })
 			.then((r) => notify('Edit saved'))
 			.catch((e) => notify(`Error encountered ${e}`))
 			.finally(() => (loading = false));

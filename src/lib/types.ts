@@ -9,8 +9,7 @@ export interface BeforeInstallPromptEvent extends Event {
 		platform: string;
 	}>;
 }
-export interface Post extends HasV {
-	_id: ObjectId;
+export interface Post {
 	created: Date;
 	last_modified: Date;
 	user: string;
@@ -18,8 +17,9 @@ export interface Post extends HasV {
 	body: string;
 }
 
-export type V = number[];
-
-export interface HasV {
-	v: V
+export interface PostEntry {
+	id: string,
+	value: Post
 }
+
+export type V = number[];

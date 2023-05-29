@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import PostsPagination from '$lib/components/PostsPagination.svelte';
-
+	import type { PageData } from './$types';
+	export let data: PageData;
 	let current_page: number;
 </script>
 
-<PostsPagination page={current_page} posts={$page.data.posts} />
+<PostsPagination page={current_page} posts={data.posts} />

@@ -14,7 +14,7 @@
 			return;
 		}
 		loading = true;
-		console.log($page.data.session.user);
+		console.log(e.detail, $page.data.session.user);
 		await axios
 			.post('/add', {
 				...e.detail,

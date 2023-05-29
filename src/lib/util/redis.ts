@@ -26,16 +26,16 @@ try {
 				DIM: 1536,
 				DISTANCE_METRIC: 'COSINE'
 			},
-			created: {
-				type: SchemaFieldTypes.NUMERIC,
-				SORTABLE: true,
-				NOINDEX: true
-			},
-			last_modified: {
-				type: SchemaFieldTypes.NUMERIC,
-				SORTABLE: true,
-				NOINDEX: true
-			}
+			// created: {
+			// 	type: SchemaFieldTypes.NUMERIC,
+			// 	SORTABLE: true,
+			// 	NOINDEX: true
+			// },
+			// last_modified: {
+			// 	type: SchemaFieldTypes.NUMERIC,
+			// 	SORTABLE: true,
+			// 	NOINDEX: true
+			// }
 		},
 		{
 			PREFIX: 'post'
