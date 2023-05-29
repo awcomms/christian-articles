@@ -35,19 +35,35 @@
 	<p>Last Modified: {post.last_modified.toLocaleString}</p>
 </div> -->
 
-<CopyButton
-	feedback="The link to this post has been copied to the clipboard"
-	text={`${$page.url}`}
-	iconDescription="Copy the link to this post"
-/>
+
 
 <!-- <Tab> -->
 <!-- <TabContent title="Post"> -->
-<h2>{post.name}</h2>
-<p>{post.body}</p>
+<div class="article">
+	<div class="title">
+		<h2>{post.name}</h2>
+		<CopyButton
+		feedback="The link to this post has been copied to the clipboard"
+		text={`${$page.url}`}
+		iconDescription="Copy the link to this post"
+	/>
+	</div>
+	<p>{post.body}</p>
+</div>
 <!-- </TabContent> -->
 
 <!-- <TabContent title="Similar Posts">
 		<PostsPagination {posts} page={current_page} />
 	</TabContent> -->
 <!-- </Tab> -->
+
+<style lang="sass">
+	.article
+		display: flex
+		flex-direction: column
+		row-gap: 1rem
+	.title
+		display: flex
+		flex-direction: row
+		column-gap: 1rem
+</style>
