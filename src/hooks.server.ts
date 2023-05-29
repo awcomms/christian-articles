@@ -2,14 +2,15 @@ import { SvelteKitAuth } from '@auth/sveltekit';
 import Google from '@auth/core/providers/google';
 import { AUTH_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '$env/static/private';
 import { sequence } from '@sveltejs/kit/hooks';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
+import { protected_routes } from '$lib/constants';
 
 const authorization: Handle = async ({ event, resolve }) => {
-	// if (event.url.pathname.startsWith('/edit')) {
-	// 	if (!(await event.locals.getSession())) {
-	// 		throw redirect(303, '/auth');
-	// 	}
-	// }
+	if (protected_routes.includes(event.url.pathname)) {
+		if (!(await event.locals.getSession())) {
+			throw redirect(303, '/auth');
+		}
+	}
 	return resolve(event);
 };
 
