@@ -14,6 +14,7 @@
 	import Moon from 'carbon-icons-svelte/lib/Moon.svelte';
 	import { theme } from '$lib/theme_store';
 	import { signIn, signOut } from '@auth/sveltekit/client';
+	import LogoGithub from 'carbon-icons-svelte/lib/LogoGithub.svelte';
 	import UserAvatarFilledAlt from 'carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte';
 
 	$: isOpen = false;
@@ -34,7 +35,7 @@
 	</svelte:fragment>
 	<HeaderUtilities>
 		<a
-			href={PUBLIC_PROJECT_GITHUB_REPOSITORY}
+			href={$page.data.github_repo}
 			rel="noopener noreferrer"
 			target="_blank"
 			class="bx--header__action logo"
@@ -63,3 +64,11 @@
 		</HeaderAction>
 	</HeaderUtilities>
 </Header>
+
+<style lang="sass">
+	.logo
+		display: flex
+		align-items: center
+		justify-content: center
+		padding-bottom: 2px
+</style>
