@@ -25,7 +25,8 @@
 </div>
 
 <style lang="sass">
-	display: flex
-	flex-direction: column
-	row-gap: 1rem
+	.form
+		display: flex
+		flex-direction: column
+		row-gap: 1rem
 </style>
