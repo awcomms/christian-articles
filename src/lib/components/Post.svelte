@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let id: string, post: Post
+	export let id: string, post: Post;
 
 	import { Button, ButtonSet, CopyButton, Tab, TabContent } from 'carbon-components-svelte';
 	import type { Post } from '$lib/types';
@@ -8,6 +8,8 @@
 	import { goto } from '$app/navigation';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 	import { page } from '$app/stores';
+	import { client_delete } from '$lib/util/client_del';
+	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 
 	let current_page: number, posts: Post[];
 
@@ -21,6 +23,10 @@
 {#if $page.data.session?.user === post.user}
 	<ButtonSet>
 		<Button on:click={() => goto(`${id}/edit`)} iconDescription="Edit" icon={Edit} />
+			<Button
+				icon={TrashCan}
+				on:click={async () => await client_delete(id)}
+			/>
 	</ButtonSet>
 {/if}
 
@@ -36,12 +42,12 @@
 />
 
 <!-- <Tab> -->
-	<!-- <TabContent title="Post"> -->
-		<h2>{post.name}</h2>
-		<p>{post.body}</p>
-	<!-- </TabContent> -->
+<!-- <TabContent title="Post"> -->
+<h2>{post.name}</h2>
+<p>{post.body}</p>
+<!-- </TabContent> -->
 
-	<!-- <TabContent title="Similar Posts">
+<!-- <TabContent title="Similar Posts">
 		<PostsPagination {posts} page={current_page} />
 	</TabContent> -->
 <!-- </Tab> -->

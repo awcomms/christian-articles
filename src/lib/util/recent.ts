@@ -8,9 +8,13 @@ export const recent = async <Type>({
 	page: number;
 }): Type[] => {
 	const results = await client.ft.search(index, '*', {
-		SORTBY: 'created',
+		SORTBY: {
+			BY: 'created',
+			DIRECTION: 'DESC'
+		},
 		LIMIT: { from, size: 21 },
-		RETURN: ['name', 'body', 'user', 'id']
+		RETURN: ['name', 'body', 'user', 'id'],
+		DIALECT: 2
 	});
 	console.log(results)
 	return results.documents;

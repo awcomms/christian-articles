@@ -4,15 +4,19 @@
 	import axios from 'axios';
 	import { notify } from '$lib/util/notify';
 	import { goto } from '$app/navigation';
+	import { client_delete } from '$lib/util/client_del';
 
 	export let data: PageData;
 
 	let loading = false;
 
 	const del = async () => {
-		await axios.delete(`/${data.id}/del`).catch((e) => notify(`An error occured: ${e}`));
-		notify(`Post ${data.id} deleted`)
-		goto('/')
+		await client_delete(data.id)
+			.then((r) => {
+				notify(`Post ${data.id} deleted`);
+				goto('/');
+			})
+			.catch((e) => notify(`An error occured: ${e}`));
 	};
 
 	const edit = async (e: CustomEvent) => {
