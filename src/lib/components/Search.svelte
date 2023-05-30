@@ -5,6 +5,7 @@
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import axios from 'axios';
 	import { notify } from '$lib/util/notify';
+	import OnEnter from './OnEnter.svelte';
 
 	let loading = false,
 		search: string,
@@ -13,10 +14,6 @@
 		page: number = 1;
 
 	$: get(page);
-
-	const window_keydown = (e) => {
-		if (e.key === 'Enter') get(page);
-	};
 
 	const get = async (page: number) => {
 		if (!search) return;
@@ -30,7 +27,7 @@
 	};
 </script>
 
-<svelte:window on:keydown={window_keydown} />
+<OnEnter on:enter={() => get(page)} />
 
 <Row>
 	<TextInput bind:value={search} />
@@ -40,5 +37,13 @@
 {#if loading}
 	<Loading />
 {:else if posts.length > 0}
-	<PostsPagination {totalItems} {posts} {page} />
+	<PostsPagination
+		{totalItems}
+		run_get={false}
+		on:update={({ detail }) => {
+			get(detail.page);
+		}}
+		{posts}
+		{page}
+	/>
 {/if}

@@ -5,7 +5,7 @@
 	import { Loading, Pagination } from 'carbon-components-svelte';
 	import { notify } from '$lib/util/notify';
 
-	export let filters: Record<string, string> = {},
+	export let filters: Record<string, string> = {}, run_get = true,
 		page: number = 1,
 		totalItems: number,
 		posts: PostEntry[];
@@ -27,8 +27,9 @@
 {/if}
 
 <Pagination
+	on:update
 	on:update={async ({ detail }) => {
-		console.log(detail.page);
+		if (!run_get) return
 		loading = true;
 		await get(detail.page).then(() => (loading = false));
 	}}

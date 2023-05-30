@@ -10,9 +10,14 @@
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import OnEnter from './OnEnter.svelte';
 
 	const dispatch = createEventDispatcher();
+
+	const dispatch_accept = () => dispatch('accept', post);
 </script>
+
+<OnEnter on:enter={dispatch_accept} />
 
 <div class="form">
 	<TextInput disabled={save_loading || delete_loading} bind:value={post.name} labelText="Name" />
@@ -26,7 +31,7 @@
 		<Button
 			disabled={save_loading || delete_loading}
 			icon={save_loading ? InlineLoading : Save}
-			on:click={() => dispatch('accept', post)}>Save</Button
+			on:click={dispatch_accept}>Save</Button
 		>
 		{#if id}
 			<Button

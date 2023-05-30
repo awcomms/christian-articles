@@ -20,7 +20,9 @@
 </Modal>
 
 <div class="post">
-	<Link href="/post/{post.id}">{post.value.name}</Link>
+	<div class="name">
+		<Link href="/post/{post.id}">{post.value.name}</Link>
+	</div>
 	<div class="buttons">
 		<Button
 			kind="ghost"
@@ -41,12 +43,12 @@
 </div>
 
 <style lang="sass">
+	.name
+		width: 74%
 	.buttons
 		display: flex
 		justify-content: flex-start
 	.post 
 		display: flex
-		justify-content: space-between
 		align-items: center
-		padding: 0.7rem
 </style>
