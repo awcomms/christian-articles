@@ -2,14 +2,14 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Edit from '$lib/components/Edit.svelte';
+	import { escape } from '$lib/util/escape';
 	import { notify } from '$lib/util/notify';
 	import axios from 'axios';
-	import { InlineLoading } from 'carbon-components-svelte';
 
 	let loading = false;
 
 	const add = async (e: CustomEvent) => {
-		if (!$page.data.session || !$page.data.session.user) {
+		if (!$page.data.session || !$page.data.session.user?.email) {
 			// goto('/auth');
 			notify(`You are not logged in, Please log in to continue this action`);
 			return;
@@ -19,8 +19,6 @@
 		await axios
 			.post('/post', {
 				...e.detail,
-				user_name: $page.data.session.user.name,
-				user_email: $page.data.session.user.email,
 				created: Date.now()
 			})
 			.then(async (r) => {
@@ -32,7 +30,4 @@
 	};
 </script>
 
-{#if loading}
-	<InlineLoading />
-{/if}
-<Edit disabled={loading} on:accept={add} />
+<Edit save_loading={loading} on:accept={add} />

@@ -5,13 +5,16 @@
 	import { Loading, Pagination } from 'carbon-components-svelte';
 	import { notify } from '$lib/util/notify';
 
-	export let page: number, totalItems: number, posts: PostEntry[];
+	export let filters: Record<string, string> = {},
+		page: number = 1,
+		totalItems: number,
+		posts: PostEntry[];
 
 	let loading = false;
 
 	const get = async (page: number) => {
 		({ totalItems, posts } = await axios
-			.get('/post', { params: { page } })
+			.post('/post/get', { page, filters })
 			.then((r) => r.data)
 			.catch((e) => notify(e)));
 	};
@@ -25,7 +28,7 @@
 
 <Pagination
 	on:update={async ({ detail }) => {
-		console.log(detail.page)
+		console.log(detail.page);
 		loading = true;
 		await get(detail.page).then(() => (loading = false));
 	}}

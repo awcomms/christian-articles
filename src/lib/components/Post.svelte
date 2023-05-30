@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let id: string, post: Post;
 
-	import { Button, ButtonSet, CopyButton, Tab, TabContent } from 'carbon-components-svelte';
+	import { Button, ButtonSet, CopyButton, Link, Tab, TabContent } from 'carbon-components-svelte';
 	import type { Post } from '$lib/types';
 	// import PostsPagination from './PostsPagination.svelte';
 	// import axios from 'axios';
@@ -71,7 +71,7 @@
 			/>
 		{/if}
 	</div>
-	<p>By {post.user_name}</p>
+	<p>Author: <Link href="/post/user/{post.user_email}">{post.user_email}</Link></p>
 	<p>{post.body}</p>
 </div>
 

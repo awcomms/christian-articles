@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let edit_loading: boolean,
-		delete_loading: boolean,
+	export let save_loading = false,
+		delete_loading = false,
 		id: string | undefined = undefined,
 		post: Pick<Post, 'name' | 'body'> = { name: '', body: '' };
 
@@ -15,26 +15,26 @@
 </script>
 
 <div class="form">
-	<TextInput disabled={edit_loading || delete_loading} bind:value={post.name} labelText="Name" />
+	<TextInput disabled={save_loading || delete_loading} bind:value={post.name} labelText="Name" />
 	<TextArea
 		helperText="Markdown may be used for the body of the post"
-		disabled={edit_loading || delete_loading}
+		disabled={save_loading || delete_loading}
 		bind:value={post.body}
 		labelText="Body"
 	/>
 	<ButtonSet stacked>
 		<Button
-			disabled={edit_loading || delete_loading}
-			icon={edit_loading ? InlineLoading : Save}
+			disabled={save_loading || delete_loading}
+			icon={save_loading ? InlineLoading : Save}
 			on:click={() => dispatch('accept', post)}>Save</Button
 		>
 		{#if id}
 			<Button
-				disabled={edit_loading || delete_loading}
-				icon={edit_loading ? InlineLoading : TrashCan}
+				disabled={save_loading || delete_loading}
+				icon={save_loading ? InlineLoading : TrashCan}
 				on:click={() => dispatch('delete', post)}>Delete</Button
 			>
-			<Button disabled={edit_loading || delete_loading} icon={View} href={`/post/${id}`}
+			<Button disabled={save_loading || delete_loading} icon={View} href={`/post/${id}`}
 				>View this item's page</Button
 			>
 		{/if}

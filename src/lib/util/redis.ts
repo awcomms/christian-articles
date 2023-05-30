@@ -27,16 +27,9 @@ try {
 				DIM: 1536,
 				DISTANCE_METRIC: 'COSINE'
 			},
-			// created: {
-			// 	type: SchemaFieldTypes.NUMERIC,
-			// 	SORTABLE: true,
-			// 	NOINDEX: true
-			// },
-			// last_modified: {
-			// 	type: SchemaFieldTypes.NUMERIC,
-			// 	SORTABLE: true,
-			// 	NOINDEX: true
-			// }
+			user_email_escaped: {
+				type: SchemaFieldTypes.TEXT
+			}
 		},
 		{
 			PREFIX: posts_index_name

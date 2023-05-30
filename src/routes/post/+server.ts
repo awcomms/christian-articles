@@ -1,22 +1,20 @@
-import { json, text } from '@sveltejs/kit';
+import { redirect, text } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { create } from '$lib/util/create';
 import { posts_index_name } from '$lib/constants';
-import { recent } from '$lib/util/recent';
-import { count } from '$lib/util/count';
+import { escape } from '$lib/util/escape';
 
-export const POST = (async ({ request }) => {
-	return text(await create({ index: posts_index_name, data: await request.json() }));
-}) satisfies RequestHandler;
-
-export const GET: RequestHandler = async ({ url }) => {
-	const page = url.searchParams.get('page');
-	console.log('rpage', page)
-	return json({
-		totalItems: await count(posts_index_name),
-		posts: await recent({
-			index: posts_index_name,
-			page: Number(page) || 0
-		})
-	});
+export const POST: RequestHandler = async ({ request, locals }) => {
+	const session = await locals.getSession();
+	if (!session || !session.user) throw redirect(303, '/auth');
+	const data = await request.json();
+	data.user_email = session.user.email;
+	data.user_name = session.user.name;
+	const user_email_escaped = escape(data.user_email);
+	console.log('u', user_email_escaped)
+	data.user_email_escaped = user_email_escaped
+	data.test = "so1"
+	console.log('du', data.user_email_escaped);
+	console.log('d', data);
+	return text(await create({ index: posts_index_name, data }));
 };

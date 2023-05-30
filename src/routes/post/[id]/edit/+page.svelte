@@ -8,7 +8,7 @@
 
 	export let data: PageData;
 
-	let edit_loading = false,
+	let save_loading = false,
 		delete_loading = false;
 
 	const del = async () => {
@@ -23,18 +23,18 @@
 	};
 
 	const edit = async (e: CustomEvent) => {
-		edit_loading = true;
+		save_loading = true;
 		await axios
 			.put(`/post/${data.id}`, { id: data.id, data: { ...e.detail, last_modified: Date.now() } })
 			.then((r) => notify('Edit saved'))
 			.catch((e) => notify(`An error occured: ${e}`))
-			.finally(() => (edit_loading = false));
+			.finally(() => (save_loading = false));
 	};
 </script>
 
 <Edit
 	id={data.id}
-	{edit_loading}
+	{save_loading}
 	{delete_loading}
 	on:delete={del}
 	on:accept={edit}
