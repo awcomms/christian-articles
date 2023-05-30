@@ -1,3 +1,4 @@
+export const items_per_page = 7
 export const posts_index_name = 'post'
 export const protected_routes = ['/add']
 export const embedding_model = 'text-embedding-ada-002';
