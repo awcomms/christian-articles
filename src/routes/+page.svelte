@@ -10,7 +10,7 @@
 <Row>
 	<Column>
 		<div class="all">
-			<Button href="/post/add" icon={Add}>Add an article</Button>
+			<Button href="/post/add" icon={Add}>Create an article</Button>
 			<!-- <PostsPagination {...data} /> -->
 			<Tabs>
 				<Tab label="Most Recent" />

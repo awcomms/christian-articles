@@ -1,5 +1,5 @@
 <script>
-	import { SideNav, SideNavItems, SideNavMenu } from 'carbon-components-svelte';
+	import { SideNav, SideNavItems } from 'carbon-components-svelte';
 	import SideNavLink from './SideNavLink.svelte';
 	import { page } from '$app/stores';
 
@@ -10,9 +10,9 @@
 
 <SideNav bind:isOpen={$isSideNavOpen}>
 	<SideNavItems>
-		<SideNavLink text="Create a post" href="/post/add" />
+		<SideNavLink text="Create an article" href="/post/add" />
 		{#if $page.data.session?.user}
-			<SideNavLink text="View your posts" href="/post/user/{$page.data.session?.user.email}" />
+			<SideNavLink text="View your articles" href="/post/user/{$page.data.session?.user.email}" />
 		{/if}
 		<A2HsLink />
 	</SideNavItems>
