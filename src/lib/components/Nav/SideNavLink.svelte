@@ -4,7 +4,6 @@
   export let href: string | null | undefined = ''
   export let text = ''
   export let menuItem = false
-  export let isSelected = $page.url.pathname === href
 
   import { isSideNavOpen } from "./store";
   import { SideNavLink, SideNavMenuItem } from "carbon-components-svelte";
@@ -20,7 +19,7 @@
 
 <svelte:component
   this={component}
-  {isSelected}
+  isSelected={`${$page.url.pathname}${$page.url.search}` === _href}
   {...$$restProps}
   on:click
   on:click={click}

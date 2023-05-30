@@ -1,37 +1,61 @@
-import { embedding_field_name, embedding_model } from '$lib/constants';
-import { openai } from './openai';
+import { embedding_field_name, embedding_model, items_per_page } from '$lib/constants';
+import type { SearchOptions } from 'redis';
 import { client, float32Buffer } from './redis';
+import { openai } from './openai';
 
-export const search = async ({
+interface ReturnType<T> {
+	total: number;
+	documents: T[];
+}
+
+export const search = async <T>({
 	index,
 	page,
-	input
+	filters,
+	count,
+	search
 }: {
 	index: string;
 	page: number;
-	input: string;
-}) => {
-	let v;
-	try {
-		v = await openai
-			.createEmbedding({ model: embedding_model, input })
-			.then((r) => r.data.data[0].embedding);
-	} catch (e) {
-		console.error(e);
+	filters?: Record<string, string>;
+	count?: boolean;
+	search?: string;
+}): ReturnType<T> => {
+	const options: SearchOptions = {
+		LIMIT: count
+			? { from: 0, size: 0 }
+			: { from: page > 1 ? (page - 1) * items_per_page : 0, size: items_per_page },
+		RETURN: ['name', 'body', 'id', 'user_email', 'user_name'], // TODO how to return all fields at once
+		DIALECT: 2
+	};
+
+	let query = '';
+
+	if (filters && Object.keys(filters).length) {
+		Object.entries(filters).forEach((f) => (query += `@${f[0]}:"${f[1]}"`));
+	} else {
+		query = '*';
 	}
 
-	if (!v) throw 'An Error occured'
+	if (search) {
+		query += `=>[KNN 7 @${embedding_field_name} $BLOB${filters ? ' HYBRID_POLICY ADHOC_BF' : ''}]`; //TODO set ADHOC_BF only if filters
+		options.PARAMS = {
+			BLOB: float32Buffer(
+				await openai
+					.createEmbedding({ model: embedding_model, input: search })
+					.then((r) => r.data.data[0].embedding)
+			)
+		};
+		options.SORTBY = {
+			BY: `__${embedding_field_name}_score`,
+			DIRECTION: 'ASC'
+		};
+	} else {
+		options.SORTBY = {
+			BY: 'created',
+			DIRECTION: 'DESC'
+		};
+	}
 
-	console.log(v)
-
-	const results = await client.ft.search(index, `*=>[KNN 7 @${embedding_field_name} $BLOB AS ${embedding_field_name}`, {
-		PARAMS: {
-			BLOB: float32Buffer(v)
-		},
-		SORTBY: `${embedding_field_name}`,
-		DIALECT: 2,
-		LIMIT: { from: page, size: 21 },
-		RETURN: ['name', 'body', 'user', 'id'],
-	});
-	return results.documents;
+	return await client.ft.search(index, query, options);
 };

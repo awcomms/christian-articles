@@ -31,7 +31,7 @@
 		{#if id}
 			<Button
 				disabled={save_loading || delete_loading}
-				icon={save_loading ? InlineLoading : TrashCan}
+				icon={delete_loading ? InlineLoading : TrashCan}
 				on:click={() => dispatch('delete', post)}>Delete</Button
 			>
 			<Button disabled={save_loading || delete_loading} icon={View} href={`/post/${id}`}

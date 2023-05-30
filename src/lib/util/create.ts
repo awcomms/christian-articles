@@ -10,9 +10,6 @@ export const v_blob = async (data: object) => {
 		.then((r) => {
 			return r.data.data[0].embedding;
 		})
-		.catch((e) => {
-			throw `OpenAI Embeddings error: ${e}`;
-		});
 	const blob = float32Buffer(v);
 	return { v: blob, ...data };
 };

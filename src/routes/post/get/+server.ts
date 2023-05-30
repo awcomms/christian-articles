@@ -1,14 +1,12 @@
 import { posts_index_name } from '$lib/constants';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { recent } from '$lib/util/recent';
+import { search } from '$lib/util/search';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const { page, filters } = await request.json();
-	const res = await recent({
+	const res = await search({
 		index: posts_index_name,
-		page,
-		filters
+		...(await request.json())
 	});
 	return json({
 		totalItems: res.total,

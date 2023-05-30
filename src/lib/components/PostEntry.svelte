@@ -3,6 +3,7 @@
 	import { Modal, Button, ButtonSet, Link } from 'carbon-components-svelte';
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
+	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 	import Post from './Post.svelte';
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
@@ -20,31 +21,32 @@
 
 <div class="post">
 	<Link href="/post/{post.id}">{post.value.name}</Link>
-	<div class="after">
-		<ButtonSet>
-			<slot name="buttons" />
+	<div class="buttons">
+		<Button
+			kind="ghost"
+			on:click={() => (open = true)}
+			icon={View}
+			iconDescription="View post details"
+		/>
+		{#if $page.data.sesssion?.user.email === post.value.user_email}
+			<Button kind="ghost" href={`/post/${post.id}/edit`} iconDescription="Edit" icon={Edit} />
 			<Button
 				kind="ghost"
-				on:click={() => (open = true)}
-				icon={View}
-				iconDescription="View post details"
+				icon={TrashCan}
+				on:click={async () => await client_delete(post.id).then(() => dispatch('del'))}
 			/>
-			{#if $page.data.sesssion?.user.email === post.value.user_email}
-				<Button
-					kind="ghost"
-					icon={TrashCan}
-					on:click={async () => await client_delete(post.id).then(() => dispatch('del'))}
-				/>
-			{/if}
-		</ButtonSet>
+		{/if}
+		<slot name="buttons" />
 	</div>
 </div>
 
-<style>
-	.post {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0.7rem;
-	}
+<style lang="sass">
+	.buttons
+		display: flex
+		justify-content: flex-start
+	.post 
+		display: flex
+		justify-content: space-between
+		align-items: center
+		padding: 0.7rem
 </style>

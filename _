@@ -18,4 +18,14 @@ auth page
 _learn
     goto previous page in load function
     goto previous page in componont
-    share button to platforms
+
+replies
+replied
+    array
+
+    reply(post, target)
+        adds post.id to replies:target.id
+        adds target.id to replies:post.id
+
+    replies(post)
+        ft.search replies: post.id
