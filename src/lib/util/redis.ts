@@ -1,12 +1,13 @@
+import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from '$env/static/private';
 import { posts_index_name } from '$lib/constants';
 import type { V } from '$lib/types';
 import { SchemaFieldTypes, VectorAlgorithms, createClient } from 'redis';
 
 export const client = createClient({
-	password: 'h0IMDCuVEsLqOLEOA3ge10gdhqLAjOqc',
+	password: REDIS_PASSWORD,
 	socket: {
-		host: 'redis-14641.c265.us-east-1-2.ec2.cloud.redislabs.com',
-		port: 14641
+		host: REDIS_HOST,
+		port: Number(REDIS_PORT)
 	}
 });
 

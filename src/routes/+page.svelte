@@ -20,7 +20,7 @@
 						<PostsPagination {...data} />
 					</TabContent>
 					<TabContent>
-						<Search totalItems={data.totalItems} />
+						<Search />
 					</TabContent>
 				</svelte:fragment>
 			</Tabs>
