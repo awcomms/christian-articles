@@ -13,7 +13,7 @@
 	let loading = false;
 
 	const get = async (page: number) => {
-		({ totalItems, posts } = await axios
+		({ total: totalItems, documents: posts } = await axios
 			.post('/post/get', { page, filters })
 			.then((r) => r.data)
 			.catch((e) => notify(e)));

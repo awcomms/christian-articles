@@ -2,15 +2,34 @@
 	export let save_loading = false,
 		delete_loading = false,
 		id: string | undefined = undefined,
-		post: Pick<Post, 'name' | 'body'> = { name: '', body: '' };
+		post: Pick<Post, 'name' | 'body' | 'allow_replies' | 'subscription'> = {
+			name: '',
+			body: '',
+			allow_replies: false,
+			subscription: {
+				required: false,
+				cost: 0,
+				once: false,
+				duration: 1,
+				self: false
+			}
+		};
 
-	import { Button, ButtonSet, InlineLoading, TextArea, TextInput } from 'carbon-components-svelte';
+	import {
+		Button,
+		ButtonSet,
+		InlineLoading,
+		NumberInput,
+		TextArea,
+		TextInput,
+		Toggle
+	} from 'carbon-components-svelte';
 	import type { Post } from '$lib/types';
 	import Save from 'carbon-icons-svelte/lib/Save.svelte';
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import OnEnter from './OnEnter.svelte';
+	import OnEnter from '../OnEnter.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -27,6 +46,33 @@
 		bind:value={post.body}
 		labelText="Body"
 	/>
+
+	<p>Subscriptions</p>
+	<Toggle
+		bind:toggled={post.subscription.required}
+		labelText="Require users to be subscribed to this post to view it's sub-posts"
+	/>
+	{#if post.subscription?.required}
+		<Toggle
+			bind:toggled={post.subscription.self}
+			labelText="Require users to be subscribed to this post to view this post itself"
+		/>
+		<NumberInput
+			label="Cost for a user to subscribe to this article (USD)"
+			bind:value={post.subscription.cost}
+		/>
+		<Toggle
+			bind:toggled={post.subscription.once}
+			labelText="Allow Users have lifetime access to this post after a single one-time payment"
+		/>
+		{#if !post.subscription.once}
+			<NumberInput
+				bind:value={post.subscription.duration}
+				label="Duration of a subscription (milliseconds)"
+			/>
+		{/if}
+	{/if}
+	<Toggle bind:toggled={post.allow_replies} labelText="Allow users to reply to this post" />
 	<ButtonSet stacked>
 		<Button
 			disabled={save_loading || delete_loading}

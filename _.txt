@@ -1,0 +1,106 @@
+post
+    subs
+
+home page/ posts page
+add page
+edit page
+post component
+    share
+        copy link
+        share to platforms
+    parse markdown
+post_entry component
+posts component
+pagination_posts component
+edit component
+auth page
+    load function checks if logged in, if logged in, redirects to previous page
+    button to go previous page if logged in
+
+_learn
+    goto previous page in load function
+    goto previous page in componont
+
+replies
+replied
+    array
+
+    POST:reply(post, target)
+        if not user is post user_or_creator
+            throw 401
+        if not target creator allows all replies
+            if not user is target user_or_creator
+                throw 401
+        reply(post, target)
+
+    POST:unreply(post, target)
+        if not post user
+            throw 401
+        unreply(post, target)
+
+    reply(post, target)
+        adds post.id to target.id.replies
+        adds target.id to post.id.replied
+
+    replies/replied(post)
+        ft.search post filters replies/replied:post.id
+
+
+    
+todo
+    users
+        add_users
+
+    rename creator to creator in all previous entries
+    settings allow_replies
+
+    subscribe(email, post)
+        post = resolve_edit_root(post)
+        post.arrappend('subscribers', {email, expires: post.subscription.duration + date.now()})
+
+    allowed(email, post)
+        post = resolve_edit_root(post)
+        if email is a user: return true
+        search posts where post.edit.current == true and email in subscribers..email and post.id == post
+
+    PUT:post
+        post = get_edit_root(id)
+        create a new edit
+
+    post
+        subscribers
+            email
+            expires
+        subscription
+            required
+            duration
+            cost
+            self: boolean
+        edit
+            to: Id
+            date
+            id
+            current: boolean
+
+    get: uses search to get current
+    search_current: adds 'current' to filter
+
+    markdown
+
+    post component
+        similar
+        replies
+            user replies
+            community replies
+        edits
+
+    pay with paystack/paypal
+
+    goto post
+        if user not user_or_creator
+            if subscription_required(post)
+                if not subscribed(user, post)
+                    redirect subscribe
+        goto post page
+
+    Search component filter: subscription required only, subscription not required only

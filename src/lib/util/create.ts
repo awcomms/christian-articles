@@ -18,6 +18,7 @@ export const create = async ({ index, data }: { index: string; data: object }) =
 	console.log('create', index, data);
 	const id = await client.hIncrBy(ids_hash, index, 1);
 	const item_id = build_id(index, id);
+	data.id = item_id
 	await client.hSet(item_id, await v_blob(data));
 	return item_id;
 };

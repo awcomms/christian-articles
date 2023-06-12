@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Edit from '$lib/components/Edit.svelte';
+	import Edit from '$lib/components/Edit/Edit.svelte';
 	import { escape } from '$lib/util/escape';
 	import { notify } from '$lib/util/notify';
 	import axios from 'axios';

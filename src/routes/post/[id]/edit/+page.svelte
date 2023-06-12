@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import Edit from '$lib/components/Edit.svelte';
+	import Edit from '$lib/components/Edit/Edit.svelte';
 	import axios from 'axios';
 	import { notify } from '$lib/util/notify';
 	import { goto } from '$app/navigation';
@@ -25,7 +25,7 @@
 	const edit = async (e: CustomEvent) => {
 		save_loading = true;
 		await axios
-			.put(`/post/${data.id}`, { id: data.id, data: { ...e.detail, last_modified: Date.now() } })
+			.put(`/post/${data.id}`, { id: data.id, data: { ...e.detail } })
 			.then((r) => notify('Edit saved'))
 			.catch((e) => notify(`An error occured: ${e}`))
 			.finally(() => (save_loading = false));

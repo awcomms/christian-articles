@@ -20,7 +20,7 @@
 		loading = true;
 		await axios
 			.post('/post/get', { search, page })
-			.then((r) => ({ posts, totalItems } = r.data))
+			.then((r) => ({ total: totalItems, documents: posts } = r.data))
 			.catch(() => notify('Error encountered getting results'))
 			.finally(() => (loading = false));
 		console.log('spd', posts);

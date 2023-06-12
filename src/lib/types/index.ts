@@ -1,4 +1,4 @@
-import type { GoogleProfile } from '@auth/core/providers/google';
+import type { Post } from './post';
 
 type Outcome = 'accepted' | 'dismissed';
 export interface BeforeInstallPromptEvent extends Event {
@@ -9,14 +9,9 @@ export interface BeforeInstallPromptEvent extends Event {
 		platform: string;
 	}>;
 }
-export interface Post {
-	created: Date;
-	last_modified: Date;
-	user_name: string;
-	user_email: string;
-	name: string;
-	body: string;
-}
+
+export type CountId = number;
+export type RedisId = string;
 
 export interface PostEntry {
 	id: string;
@@ -24,3 +19,4 @@ export interface PostEntry {
 }
 
 export type V = number[];
+export type { Post as Post } from './post';

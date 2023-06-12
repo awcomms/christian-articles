@@ -17,30 +17,103 @@ export const float32Buffer = (arr: V): Buffer => {
 	return Buffer.from(new Float32Array(arr).buffer);
 };
 
-// try {
-// 	await client.ft.create(
-// 		posts_index_name,
-// 		{
-// 			v: {
-// 				type: SchemaFieldTypes.VECTOR,
-// 				ALGORITHM: VectorAlgorithms.HNSW,
-// 				TYPE: 'FLOAT32',
-// 				DIM: 1536,
-// 				DISTANCE_METRIC: 'COSINE'
-// 			},
-// 			user_email_escaped: {
-// 				type: SchemaFieldTypes.TEXT
-// 			}
-// 		},
-// 		{
-// 			PREFIX: posts_index_name
-// 		}
-// 	);
-// } catch (e) {
-// 	if (e.message === 'Index already exists') {
-// 		console.log('Index already exists, skipped creation');
-// 	} else {
-// 		console.error(e);
-// 		process.exit(1);
-// 	}
-// }
+try {
+	await client.ft.dropIndex(posts_index_name);
+	await client.ft.create(
+		posts_index_name,
+		{
+			'$.v': {
+				AS: 'v',
+				type: SchemaFieldTypes.VECTOR,
+				ALGORITHM: VectorAlgorithms.HNSW,
+				TYPE: 'FLOAT32',
+				DIM: 1536,
+				DISTANCE_METRIC: 'COSINE'
+			},
+			'$.creator.email': {
+				AS: 'creator',
+				type: SchemaFieldTypes.TEXT
+			},
+			'$.name': {
+				AS: 'name',
+				type: SchemaFieldTypes.TEXT
+			},
+			'$.subscription.required': {
+				AS: 'subscription_required',
+				type: SchemaFieldTypes.NUMERIC,
+				SORTABLE: true,
+				NOINDEX: true
+			},
+			'$.replies': {
+				AS: 'replies',
+				type: SchemaFieldTypes.TAG,
+				SEPARATOR: ';'
+			},
+			'$.replied': {
+				AS: 'replied',
+				type: SchemaFieldTypes.TAG,
+				SEPARATOR: ';'
+			}
+		},
+		{
+			ON: 'JSON',
+			PREFIX: posts_index_name
+		}
+	);
+} catch (e) {
+	if (e.message === 'Index already exists') {
+		console.log('Index already exists, skipped creation');
+	} else {
+		console.error(e);
+		process.exit(1);
+	}
+}
+
+client.ft.alter(posts_index_name, {
+	'$.id': {
+		AS: 'id',
+		type: SchemaFieldTypes.TEXT
+	},
+	'$.subscribers..email': {
+		AS: 'subscribers',
+		type: SchemaFieldTypes.TAG,
+		SEPARATOR: ';'
+	},
+	'$.users': {
+		AS: 'users',
+		type: SchemaFieldTypes.TAG,
+		SEPARATOR: ';'
+	},
+	'$.verion.current': {
+		AS: 'current_version',
+		type: SchemaFieldTypes.NUMERIC,
+		SORTABLE: true,
+		NOINDEX: true
+	},
+	'$.edit.to': {
+		AS: 'edit_to',
+		type: SchemaFieldTypes.TEXT
+	},
+	'$.creator': {
+		AS: 'creator',
+		type: SchemaFieldTypes.TEXT
+	},
+	'$.allow_replies': {
+		AS: 'allow_replies',
+		type: SchemaFieldTypes.NUMERIC,
+		SORTABLE: true,
+		NOINDEX: true
+	},
+	'$.allow_user_replies': {
+		AS: 'allow_user_replies',
+		type: SchemaFieldTypes.NUMERIC,
+		SORTABLE: true,
+		NOINDEX: true
+	},
+	'$.allow_self_replies': {
+		AS: 'allow_self_replies',
+		type: SchemaFieldTypes.NUMERIC,
+		SORTABLE: true,
+		NOINDEX: true
+	}
+});

@@ -2,6 +2,8 @@ import { embedding_field_name, embedding_model, items_per_page } from '$lib/cons
 import type { SearchOptions } from 'redis';
 import { client, float32Buffer } from './redis';
 import { openai } from './openai';
+import type { Filter } from '$lib/types/filter';
+import { NumberRange, SingleNumber, Tag, Text } from '$lib/types/filter';
 
 interface ReturnType<T> {
 	total: number;
@@ -16,23 +18,46 @@ export const search = async <T>({
 	search
 }: {
 	index: string;
-	page: number;
-	filters?: Record<string, string>;
+	page?: number;
+	filters?: Filter[];
 	count?: boolean;
 	search?: string;
-}): ReturnType<T> => {
+}): Promise<ReturnType<T>> => {
 	const options: SearchOptions = {
-		LIMIT: count
-			? { from: 0, size: 0 }
-			: { from: page > 1 ? (page - 1) * items_per_page : 0, size: items_per_page },
 		RETURN: ['name', 'body', 'id', 'user_email', 'user_name'], // TODO how to return all fields at once
-		DIALECT: 2
+		DIALECT: 3
 	};
+
+	if (page) {
+		options.LIMIT = count
+			? { from: 0, size: 0 }
+			: { from: page > 1 ? (page - 1) * items_per_page : 0, size: items_per_page };
+	}
 
 	let query = '';
 
-	if (filters && Object.keys(filters).length) {
-		Object.entries(filters).forEach((f) => (query += `@${f[0]}:"${f[1]}"`));
+	if (filters && filters.length) {
+		filters.forEach((filter) => {
+			switch (filter.constructor) {
+				case Tag:
+					query += ` @${filter.field}:{${(<Tag>filter).values.map(
+						(v, i) => `${v}${i === v.length - 1 ? '' : ' |'}`
+					)}}"`;
+					break;
+				case SingleNumber:
+					query += ` @${filter.field}:[${(<SingleNumber>filter).value} ${
+						(<SingleNumber>filter).value
+					}]`;
+					break;
+				case NumberRange:
+					query += ` @${filter.field}:[${(<NumberRange>filter).start} ${
+						(<NumberRange>filter).end
+					}]`;
+					break;
+				case Text:
+					query += ` @${(<Text>filter).field}:(${(<Text>filter).value})`;
+			}
+		});
 	} else {
 		query = '*';
 	}
