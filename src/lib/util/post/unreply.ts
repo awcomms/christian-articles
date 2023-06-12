@@ -1,13 +1,10 @@
-import { posts_index_name } from '$lib/constants';
-import { get } from '../get';
-import { inRedisArray } from '../inRedisArray';
 import { client } from '../redis';
-import { shape } from '../shape';
+import { json_array_index } from '../redis/json_array_index';
 
 export const unreply = async ({ post, target }: { post: string; target: string }) => {
-	if (await inRedisArray(posts_index_name, 'id', target, 'replies', post))
-		client.json.arrPop(target, '$.replies', replies.indexOf(post));
+	const index_in_replies = await json_array_index(target, '$.replies', post);
+	if (index_in_replies) client.json.arrPop(target, '$.replies', index_in_replies);
 
-	if (await inRedisArray(posts_index_name, 'id', post, 'replied', target))
-		client.json.arrPop(post, '$.replied', replied.indexOf(target));
+	const index_in_replied = await json_array_index(target, '$.replied', post);
+	if (index_in_replied) client.json.arrPop(post, '$.replied', index_in_replied);
 };
