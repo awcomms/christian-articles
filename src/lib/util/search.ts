@@ -10,21 +10,25 @@ interface ReturnType<T> {
 	documents: T[];
 }
 
+export interface SearchParams {
+	index: string;
+	page?: number;
+	filters?: Filter[];
+	count?: boolean;
+	RETURN: string[];
+	search?: string | Buffer;
+}
+
 export const search = async <T>({
 	index,
 	page,
 	filters,
 	count,
-	search
-}: {
-	index: string;
-	page?: number;
-	filters?: Filter[];
-	count?: boolean;
-	search?: string;
-}): Promise<ReturnType<T>> => {
+	search,
+	RETURN
+}: SearchParams): Promise<ReturnType<T>> => {
 	const options: SearchOptions = {
-		RETURN: ['name', 'body', 'id', 'user_email', 'user_name'], // TODO how to return all fields at once
+		RETURN,
 		DIALECT: 3
 	};
 
@@ -65,11 +69,14 @@ export const search = async <T>({
 	if (search) {
 		query += `=>[KNN 7 @${embedding_field_name} $BLOB${filters ? ' HYBRID_POLICY ADHOC_BF' : ''}]`; //TODO set ADHOC_BF only if filters
 		options.PARAMS = {
-			BLOB: float32Buffer(
-				await openai
-					.createEmbedding({ model: embedding_model, input: search })
-					.then((r) => r.data.data[0].embedding)
-			)
+			BLOB:
+				typeof search === 'string'
+					? float32Buffer(
+							await openai
+								.createEmbedding({ model: embedding_model, input: search })
+								.then((r) => r.data.data[0].embedding)
+					  )
+					: search
 		};
 		options.SORTBY = {
 			BY: `__${embedding_field_name}_score`,

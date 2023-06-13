@@ -58,7 +58,7 @@
 			labelText="Require users to be subscribed to this post to view this post itself"
 		/>
 		<NumberInput
-			label="Cost for a user to subscribe to this article (USD)"
+			label="Cost for a user to subscribe to this article in Naira (NGN)"
 			bind:value={post.subscription.cost}
 		/>
 		<Toggle

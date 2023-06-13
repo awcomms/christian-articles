@@ -1,4 +1,4 @@
-import type { RedisId } from ".";
+import type { RedisKey } from '.';
 
 export interface Subscription {
 	required: boolean;
@@ -9,9 +9,9 @@ export interface Subscription {
 }
 
 export interface Post {
-	id: RedisId;
+	id: RedisKey;
 	created: Date;
-	last_modified: Date;
+	updated: Date;
 	user_name: string;
 	user_email: string;
 	allow_replies: boolean;
@@ -19,11 +19,12 @@ export interface Post {
 	name: string;
 	body: string;
 	edit?: Edit;
+	subscription_expires: number | 'never'
 }
 
 export interface Edit {
 	id: number;
-	to: RedisId;
+	to: RedisKey;
 	date: Date;
 	current: number;
 }

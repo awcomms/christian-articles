@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { TextInput, Button, Row, Loading } from 'carbon-components-svelte';
-	import type { PostEntry } from '$lib/types';
+	import type { PostEntry, RedisKey } from '$lib/types';
 	import PostsPagination from './PostsPagination.svelte';
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import axios from 'axios';
 	import { notify } from '$lib/util/notify';
 	import OnEnter from './OnEnter.svelte';
 
+	export let select = false,
+		reference: RedisKey | undefined = undefined,
+		selected: RedisKey[] = [];
 	let loading = false,
 		search: string,
 		totalItems: number,
@@ -19,7 +22,7 @@
 		if (!search) return;
 		loading = true;
 		await axios
-			.post('/post/get', { search, page })
+			.post('/post/search', { search, page, replied: reference ? reference : undefined })
 			.then((r) => ({ total: totalItems, documents: posts } = r.data))
 			.catch(() => notify('Error encountered getting results'))
 			.finally(() => (loading = false));
@@ -38,6 +41,8 @@
 	<Loading />
 {:else if posts.length > 0}
 	<PostsPagination
+		bind:selected
+		{select}
 		{totalItems}
 		run_get={false}
 		on:update={({ detail }) => {

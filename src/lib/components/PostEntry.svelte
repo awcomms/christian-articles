@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { PostEntry } from '$lib/types';
-	import { Modal, Button, ButtonSet, Link } from 'carbon-components-svelte';
+	import type { PostEntry, RedisKey } from '$lib/types';
+	import { Modal, Button, Link } from 'carbon-components-svelte';
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
@@ -9,7 +9,9 @@
 	import { createEventDispatcher } from 'svelte';
 	import { client_delete } from '$lib/util/client_del';
 
-	export let post: PostEntry;
+	export let post: PostEntry,
+		select = false,
+		selected = false;
 	let open = false;
 
 	const dispatch = createEventDispatcher();
@@ -19,7 +21,15 @@
 	<Post id={post.id} post={post.value} />
 </Modal>
 
-<div class="post">
+<div on:click on:keydown={() => dispatch('click')} class="post">
+	{#if select}
+		<div
+			on:click={() => dispatch('select-click')}
+			on:keydown={() => dispatch('select-click')}
+			class="select-control"
+			class:selected
+		/>
+	{/if}
 	<div class="name">
 		<Link href="/post/{post.id}">{post.value.name}</Link>
 	</div>
@@ -43,6 +53,7 @@
 </div>
 
 <style lang="sass">
+	@use '@carbon/layout'
 	.name
 		width: 74%
 	.buttons
@@ -51,4 +62,10 @@
 	.post 
 		display: flex
 		align-items: center
+	.select-control
+		width: layout.$spacing-04
+		height: layout.$spacing-04
+		border: 50% solid black
+	.selected
+		background-color: black
 </style>

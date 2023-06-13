@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PostEntry } from '$lib/types';
+	import type { PostEntry, RedisKey } from '$lib/types';
 	import axios from 'axios';
 	import Posts from './Posts.svelte';
 	import { Loading, Pagination } from 'carbon-components-svelte';
@@ -8,6 +8,8 @@
 	export let filters: Record<string, string> = {}, run_get = true,
 		page: number = 1,
 		totalItems: number,
+		select = false,
+		selected: RedisKey[] = [],
 		posts: PostEntry[];
 
 	let loading = false;
@@ -23,7 +25,7 @@
 {#if loading}
 	<Loading />
 {:else}
-	<Posts {posts} />
+	<Posts bind:selected {select} {posts} />
 {/if}
 
 <Pagination

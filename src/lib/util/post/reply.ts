@@ -1,11 +1,14 @@
-import { posts_index_name } from '$lib/constants';
-import { inRedisArray } from '../inRedisArray';
 import { client } from '../redis';
+import { get } from '../get';
 
 export const reply = async ({ post, target }: { post: string; target: string }) => {
-	if (! await inRedisArray(posts_index_name, 'id', target, 'replies', post))
-		await client.json.arrAppend(target, '$.replies', [post]);
+	if (
+		!(await get<{ [index: string]: boolean }>(target, [`$.replies.${post}`]).then((r) => r[post]))
+	)
+		await client.json.set(target, `$.replies.${post}`, true);
 
-	if (! await inRedisArray(posts_index_name, 'id', post, 'replied', target))
-		await client.json.arrAppend(post, '$.replied', [target]);
+	if (
+		!(await get<{ [index: string]: boolean }>(post, [`$.replied.${target}`]).then((r) => r[target]))
+	)
+		await client.json.set(post, `$.replied.${target}`, true);
 };

@@ -1,20 +1,19 @@
-import { redirect, text, json, error } from '@sveltejs/kit';
+import { redirect, text, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { create } from '$lib/util/create';
 import { posts_index_name } from '$lib/constants';
 import { escape } from '$lib/util/escape';
 import { del } from '$lib/util/del';
 import { update } from '$lib/util/update';
-import { client } from '$lib/util/redis';
 import { get_root_id } from '$lib/util/post/get_root_id';
+import { exists } from '$lib/util/redis/exists';
+import { isUser } from '$lib/util/post/isUser';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const session = await locals.getSession();
-	if (!session || !session.user) throw redirect(303, '/auth');
+	if (!session?.user?.email) throw redirect(303, '/auth');
 	const data = await request.json();
-	data.user_email = session.user.email;
-	data.user_name = session.user.name;
-	const creator = escape(data.user_email);
+	const creator = escape(session.user.email);
 	data.creator = creator;
 	data.users = [creator];
 	return text(await create({ index: posts_index_name, data }));
@@ -22,21 +21,29 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 export const PUT: RequestHandler = async ({ request, locals, url }) => {
 	const session = await locals.getSession();
-	if (!session || !session.user) throw redirect(302, '/auth'); //TODO
+	if (!session?.user?.email) throw redirect(302, '/auth'); //TODO
 	const id = url.searchParams.get('id');
 	if (!id) throw error(400, `The id of an item to update was not provided`);
-	if (!client.exists(id)) throw error(404, `Item with id ${id} does not exist`);
+	if (!(await exists(id))) throw error(404, `Item with id ${id} does not exist`);
 	const root_id = await get_root_id(id);
 	if (!root_id) throw error(404, `Root of post ${id} not found`);
 	const { data } = await request.json();
-	if (session.user.email !== data.user_email)
+	if (!(await isUser(session.user.email, id)))
 		throw error(
 			401,
 			`Logged in user is not authorised
 		 to perform this action`
 		); //TODO
-	data.version = { to: root_id, date: Date.now(), current: true };
-	return json(await create({ index: posts_index_name, data }));
+	await update({ id: root_id, data: { ...data, updated: Date.now() } });
+	await create({
+		index: posts_index_name,
+		data: {
+			name: data.name,
+			body: data.body,
+			version: { to: root_id, date: Date.now(), current: true }
+		}
+	});
+	return new Response('done', { status: 200 });
 };
 
 export const DELETE: RequestHandler = async ({ url }) => {

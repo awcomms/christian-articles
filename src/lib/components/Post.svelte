@@ -1,95 +1,74 @@
 <script lang="ts">
-	export let id: string, post: Post;
+	export let id: string,
+		post: Post,
+		similar: undefined | { posts: PostEntry[]; page: number; totalItems: number } = undefined;
 
-	import { Button, ButtonSet, CopyButton, Link, Tab, TabContent } from 'carbon-components-svelte';
-	import type { Post } from '$lib/types';
-	// import PostsPagination from './PostsPagination.svelte';
-	// import axios from 'axios';
-	import { goto } from '$app/navigation';
-	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
+	let reply_targets: RedisKey[] = [],
+		reply_open = false,
+		reply_loading = false;
+
+	import {
+		Button,
+		ButtonSet,
+		InlineLoading,
+		Modal,
+		Tab,
+		TabContent
+	} from 'carbon-components-svelte';
+	import Reply from 'carbon-icons-svelte/lib/Reply.svelte';
+	import type { Post, PostEntry, RedisKey } from '$lib/types';
+	import SimilarPosts from './SimilarPosts.svelte';
+	import PostView from './PostView.svelte';
+	import Search from './Search.svelte';
+	import axios from 'axios';
 	import { page } from '$app/stores';
-	import { client_delete } from '$lib/util/client_del';
-	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
-	import Share from 'carbon-icons-svelte/lib/Share.svelte';
-	import CopyLinkButton from './CopyLinkButton.svelte';
-	import CuteButton from './CuteButton.svelte';
+	import Paystack from './Paystack.svelte';
 
-	// let current_page: number, posts: Post[];
+	const reply = async () => await axios.post(`/post/${id}/reply`, { targets: reply_targets });
 
-	// $: get(current_page);
-
-	// const get = async (page: number) => {
-	// 	posts = await axios.post('/similar_posts', { id: post._id, page });
-	// };
+	const pay = async () => {};
 </script>
 
-<!-- <div>
-	<p>Created: {post.created.toLocaleString}</p>
-	<p>Last Modified: {post.last_modified.toLocaleString}</p>
-</div> -->
+{#if $page.data.session?.user}
+	<Modal
+		bind:open={reply_open}
+		modalHeading="Select posts to reply to"
+		primaryButtonText="Reply"
+		secondaryButtonText="Cancel"
+		primaryButtonIcon={reply_loading ? InlineLoading : Reply}
+		on:click:button--secondary={() => (reply_open = false)}
+		on:click:button--primary={() => {
+			reply_loading = true;
+			reply().finally(() => (reply_loading = false));
+		}}
+		hasScrollingContent
+	>
+		<Search select bind:selected={reply_targets} />
+	</Modal>
+{/if}
 
-<!-- <Tab> -->
-<!-- <TabContent title="Post"> -->
-<div class="article">
-	<div class="title">
-		<h2>{post.name}</h2>
-		{#if $page.data.session?.user?.email === post.user_email}
-			<CuteButton
-				onclick={async () => goto(`/post/${id}/edit`)}
-				iconDescription="Edit this post"
-				icon={Edit}
-			/>
-			<CuteButton
-				onclick={async () => {
-					await client_delete(id).then((r) => goto('/') /**TODO goto user's posts*/);
-				}}
-				iconDescription="Delete this post"
-				icon={TrashCan}
-			/>
-		{/if}
-		<CopyButton
-			feedback="This post has been copied to the clipboard"
-			text={`${post.name}\nBy ${post.user_name}\n\n${post.body}`}
-			iconDescription="Copy this post to the clipboard"
-		/>
-		{#if typeof navigator !== 'undefined' && navigator.share && navigator.canShare()}
-			<Button
-				on:click={() =>
-					navigator.share({
-						url: $page.url.toString(),
-						text: `${post.name} by ${post.user_name}`,
-						title: `${post.name} by ${post.user_name}`
-					})}
-				icon={Share}
-				iconDescription="Share this article"
-			/>
-		{:else}
-			<CopyLinkButton
-				feedback="The link to this post has been copied to the clipboard"
-				text={$page.url.toString()}
-				iconDescription="Copy the link to this post to the clipboard"
-			/>
-		{/if}
-	</div>
-	<p>Author: <Link href="/post/user/{post.user_email}">{post.user_email}</Link></p>
-	<p>{post.body}</p>
+<div>
+	<p>Created: {new Date(post.created).toLocaleString}</p>
+	<p>Last Updated: {new Date(post.updated).toLocaleString}</p>
 </div>
 
-<!-- </TabContent> -->
+<ButtonSet stacked>
+	{#if $page.data.session?.user}
+		<Button on:click={() => (reply_open = true)}>Reply with this post to other posts</Button>
+	{/if}
+	<Paystack button_props={{}} on:click={pay}>Subscribe to this post</Paystack>
+</ButtonSet>
 
-<!-- <TabContent title="Similar Posts">
-		<PostsPagination {posts} page={current_page} />
-	</TabContent> -->
-<!-- </Tab> -->
+{#if similar}
+	<Tab>
+		<TabContent title="Post">
+			<PostView {id} {post} />
+		</TabContent>
 
-<style lang="sass">
-	.article
-		display: flex
-		flex-direction: column
-		row-gap: 1rem
-
-	.title
-		display: flex
-		flex-direction: row
-		column-gap: 1rem
-</style>
+		<TabContent title="Similar Posts">
+			<SimilarPosts {id} {...similar} />
+		</TabContent>
+	</Tab>
+{:else}
+	<PostView {id} {post} />
+{/if}

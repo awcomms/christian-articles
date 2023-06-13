@@ -30,10 +30,6 @@ try {
 				DIM: 1536,
 				DISTANCE_METRIC: 'COSINE'
 			},
-			'$.creator.email': {
-				AS: 'creator',
-				type: SchemaFieldTypes.TEXT
-			},
 			'$.name': {
 				AS: 'name',
 				type: SchemaFieldTypes.TEXT
@@ -48,6 +44,51 @@ try {
 				AS: 'replies',
 				type: SchemaFieldTypes.TAG,
 				SEPARATOR: ';'
+			},
+			'$.id': {
+				AS: 'id',
+				type: SchemaFieldTypes.TEXT
+			},
+			'$.created': {
+				AS: 'created',
+				type: SchemaFieldTypes.NUMERIC
+			},
+			'$.users': {
+				AS: 'users',
+				type: SchemaFieldTypes.TAG,
+				SEPARATOR: ';'
+			},
+			'$.verion.current': {
+				AS: 'current_version',
+				type: SchemaFieldTypes.NUMERIC,
+				SORTABLE: true,
+				NOINDEX: true
+			},
+			'$.edit.to': {
+				AS: 'edit_to',
+				type: SchemaFieldTypes.TEXT
+			},
+			'$.creator': {
+				AS: 'creator',
+				type: SchemaFieldTypes.TEXT
+			},
+			'$.allow_replies': {
+				AS: 'allow_replies',
+				type: SchemaFieldTypes.NUMERIC,
+				SORTABLE: true,
+				NOINDEX: true
+			},
+			'$.allow_user_replies': {
+				AS: 'allow_user_replies',
+				type: SchemaFieldTypes.NUMERIC,
+				SORTABLE: true,
+				NOINDEX: true
+			},
+			'$.allow_self_replies': {
+				AS: 'allow_self_replies',
+				type: SchemaFieldTypes.NUMERIC,
+				SORTABLE: true,
+				NOINDEX: true
 			},
 			'$.replied': {
 				AS: 'replied',
@@ -68,52 +109,3 @@ try {
 		process.exit(1);
 	}
 }
-
-client.ft.alter(posts_index_name, {
-	'$.id': {
-		AS: 'id',
-		type: SchemaFieldTypes.TEXT
-	},
-	'$.subscribers..email': {
-		AS: 'subscribers',
-		type: SchemaFieldTypes.TAG,
-		SEPARATOR: ';'
-	},
-	'$.users': {
-		AS: 'users',
-		type: SchemaFieldTypes.TAG,
-		SEPARATOR: ';'
-	},
-	'$.verion.current': {
-		AS: 'current_version',
-		type: SchemaFieldTypes.NUMERIC,
-		SORTABLE: true,
-		NOINDEX: true
-	},
-	'$.edit.to': {
-		AS: 'edit_to',
-		type: SchemaFieldTypes.TEXT
-	},
-	'$.creator': {
-		AS: 'creator',
-		type: SchemaFieldTypes.TEXT
-	},
-	'$.allow_replies': {
-		AS: 'allow_replies',
-		type: SchemaFieldTypes.NUMERIC,
-		SORTABLE: true,
-		NOINDEX: true
-	},
-	'$.allow_user_replies': {
-		AS: 'allow_user_replies',
-		type: SchemaFieldTypes.NUMERIC,
-		SORTABLE: true,
-		NOINDEX: true
-	},
-	'$.allow_self_replies': {
-		AS: 'allow_self_replies',
-		type: SchemaFieldTypes.NUMERIC,
-		SORTABLE: true,
-		NOINDEX: true
-	}
-});

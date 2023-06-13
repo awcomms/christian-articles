@@ -11,7 +11,7 @@ export interface BeforeInstallPromptEvent extends Event {
 }
 
 export type CountId = number;
-export type RedisId = string;
+export type RedisKey = string;
 
 export interface PostEntry {
 	id: string;
