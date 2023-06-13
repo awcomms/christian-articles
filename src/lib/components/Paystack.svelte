@@ -1,24 +1,27 @@
 <script lang="ts">
-	import { PAYSTACK_PUBLIC } from '$env/static/private';
+	import { page } from '$app/stores';
+	import { PAYSTACK_PK_LIVE, PAYSTACK_PK_TEST, PAYSTACK_TEST } from '$env/static/private';
 	import { Button } from 'carbon-components-svelte';
 	import type { ButtonProps } from 'carbon-components-svelte/types/Button/Button.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { v4 } from 'uuid';
 
+    
+    const key = PAYSTACK_TEST ? PAYSTACK_PK_TEST : PAYSTACK_PK_LIVE
 	const dispatch = createEventDispatcher();
 
 	export let amount: number,
 		button_props: ButtonProps,
-		email: string,
 		metadata: unknown,
 		currency: 'NGN' | 'GHS' | 'ZAR' | 'USD';
 
-	export const request_payment = () => {
+	const request_payment = () => {
 		PaystackPop.setup({
-			key: PAYSTACK_PUBLIC,
-			email,
+			key,
+			email: $page.data.session?.user?.email,
 			metadata,
 			currency,
+            channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
 			amount: amount * 100,
 			ref: v4(),
 			callback: (response) => {

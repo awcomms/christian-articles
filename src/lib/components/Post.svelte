@@ -56,7 +56,13 @@
 	{#if $page.data.session?.user}
 		<Button on:click={() => (reply_open = true)}>Reply with this post to other posts</Button>
 	{/if}
-	<Paystack button_props={{}} on:click={pay}>Subscribe to this post</Paystack>
+	<Paystack
+		metadata={{ purpose: 'post_subscription', id }}
+		amount={post.subscription.cost}
+		currency="NGN"
+		button_props={{}}
+		on:click={pay}>Subscribe to this post</Paystack
+	>
 </ButtonSet>
 
 {#if similar}
