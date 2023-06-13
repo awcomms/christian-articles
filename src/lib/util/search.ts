@@ -16,7 +16,7 @@ export interface SearchParams {
 	filters?: Filter[];
 	count?: boolean;
 	RETURN: string[];
-	search?: string | Buffer;
+	search?: string | number[];
 }
 
 export const search = async <T>({
@@ -76,7 +76,7 @@ export const search = async <T>({
 								.createEmbedding({ model: embedding_model, input: search })
 								.then((r) => r.data.data[0].embedding)
 					  )
-					: search
+					: float32Buffer(search)
 		};
 		options.SORTBY = {
 			BY: `__${embedding_field_name}_score`,

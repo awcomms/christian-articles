@@ -43,7 +43,7 @@
 		}}
 		hasScrollingContent
 	>
-		<Search select bind:selected={reply_targets} />
+		<!-- <Search select bind:selected={reply_targets} /> -->
 	</Modal>
 {/if}
 
@@ -72,7 +72,7 @@
 		</TabContent>
 
 		<TabContent title="Similar Posts">
-			<SimilarPosts {id} {...similar} />
+			<!-- <SimilarPosts {id} {...similar} /> -->
 		</TabContent>
 	</Tab>
 {:else}

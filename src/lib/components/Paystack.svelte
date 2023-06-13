@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { PAYSTACK_PK_LIVE, PAYSTACK_PK_TEST, PAYSTACK_TEST } from '$env/static/private';
+	import { PUBLIC_PAYSTACK_PK_LIVE, PUBLIC_PAYSTACK_PK_TEST, PUBLIC_PAYSTACK_TEST } from '$env/static/public';
 	import { Button } from 'carbon-components-svelte';
 	import type { ButtonProps } from 'carbon-components-svelte/types/Button/Button.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { v4 } from 'uuid';
 
-    
-    const key = PAYSTACK_TEST ? PAYSTACK_PK_TEST : PAYSTACK_PK_LIVE
+	const key = PUBLIC_PAYSTACK_TEST ? PUBLIC_PAYSTACK_PK_TEST : PUBLIC_PAYSTACK_PK_LIVE;
 	const dispatch = createEventDispatcher();
 
 	export let amount: number,
@@ -21,7 +20,7 @@
 			email: $page.data.session?.user?.email,
 			metadata,
 			currency,
-            channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+			channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
 			amount: amount * 100,
 			ref: v4(),
 			callback: (response) => {

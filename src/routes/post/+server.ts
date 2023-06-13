@@ -28,6 +28,8 @@ export const PUT: RequestHandler = async ({ request, locals, url }) => {
 	const root_id = await get_root_id(id);
 	if (!root_id) throw error(404, `Root of post ${id} not found`);
 	const { data } = await request.json();
+	delete data.id;
+	delete data.created; //TOD-ummm
 	if (!(await isUser(session.user.email, id)))
 		throw error(
 			401,

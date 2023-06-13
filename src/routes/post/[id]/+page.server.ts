@@ -7,8 +7,10 @@ import type { Post } from '$lib/types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const session = await locals.getSession();
-	const current_version_id = await get_current_version_id(params.id);
-	const post = await get<Post>(current_version_id, ['$.name', '$.body', '$.subscription']);
+	// const current_version_id = await get_current_version_id(params.id).catch((e) => console.log('ce', e));
+	// console.log('current_version_id', current_version_id)
+	const post = await get<Post>(params.id, ['$.name', '$.body', '$.subscription']);
+	console.log('post_res', post)
 	if (post.subscription.required) {
 		if (!session || !session.user?.email) {
 			throw redirect(302, `/subscription_required/${params.id}`);

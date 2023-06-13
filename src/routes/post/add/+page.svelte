@@ -19,7 +19,6 @@
 		await axios
 			.post('/post', {
 				...e.detail,
-				created: Date.now()
 			})
 			.then(async (r) => {
 				console.log(r.data);
