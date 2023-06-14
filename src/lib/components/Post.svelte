@@ -17,9 +17,7 @@
 	} from 'carbon-components-svelte';
 	import Reply from 'carbon-icons-svelte/lib/Reply.svelte';
 	import type { Post, PostEntry, RedisKey } from '$lib/types';
-	import SimilarPosts from './SimilarPosts.svelte';
 	import PostView from './PostView.svelte';
-	import Search from './Search.svelte';
 	import axios from 'axios';
 	import { page } from '$app/stores';
 	import Paystack from './Paystack.svelte';
