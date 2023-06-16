@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		cost: number;
 		duration: number;
 		replies_alias: string;
-	}>(params.id, [`.payment.required`, `.name`, `.payment.once`, `.payment.cost`, `.replies_alias`]);
+	}>(params.id, [`$.payment.required`, `$.name`, `$.payment.once`, `$.payment.cost`, `$.replies_alias`]);
 	if (!required) redirect_to_post(params.id);
 	const session = await locals.getSession();
 	if (!session?.user?.email) return {};

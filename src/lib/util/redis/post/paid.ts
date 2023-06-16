@@ -6,20 +6,23 @@ interface GetRes {
 	users: Users;
 }
 
-type PaymentRes = Pick<Payment, 'once' | 'duration'>;
+type PaymentRes = Pick<Payment, 'once' | 'duration'> & {
+	users: Users
+};
 interface Users {
 	[email: string]: UserPayment;
 }
 
 export const paid = async (email: Email, id: RedisKey): Promise<boolean> => {
-	const { payment, users } = await get<GetRes>(
+	const { payment } = await get<GetRes>(
 		id,
-		[`$.payment.users.${email}`, `$.payment.once`, `.payment.duration`],
+		[`$.payment.users.${email}`, `$.payment.once`, `$.payment.duration`],
 		false
 	);
-	const { date, once } = users[email];
+	if (!payment || !payment.users || !payment?.users[email]) return false
+	const { date, paid_for_once } = payment.users[email];
 	if (!date) return false;
-	if (once) {
+	if (paid_for_once && payment.once) {
 		return true;
 	} else {
 		return payment.duration + date > Date.now();

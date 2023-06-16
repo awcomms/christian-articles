@@ -4,7 +4,7 @@ export const slim = (obj: RedisCommandArguments): Record<string, any> => {
 	return Object.keys(obj).reduce((acc: Record<string, any>, key) => {
 		const sub_keys = key.split('.');
 		const last_key = sub_keys.pop();
-		if (last_key) acc[last_key] = obj[key];
+		if (last_key) acc[last_key] = obj[key][0];
 		return acc;
 	}, {});
 };

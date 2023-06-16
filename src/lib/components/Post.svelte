@@ -4,11 +4,15 @@
 	import { Button, ButtonSet, Tab, TabContent, Tabs } from 'carbon-components-svelte';
 	import PostView from './PostView.svelte';
 	import type { Post } from '$lib/types';
+
+	console.log(post)
 </script>
 
 <div>
 	<p>Created: {new Date(post.created).toLocaleString()}</p>
-	<p>Last Updated: {new Date(post.updated).toLocaleString}</p>
+	{#if post.updated}
+		<p>Last Updated: {new Date(post.updated).toLocaleString()}</p>
+	{/if}
 </div>
 
 <ButtonSet stacked>

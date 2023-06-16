@@ -18,7 +18,7 @@ export const float32Buffer = (arr: V): Buffer => {
 };
 
 try {
-	// await client.ft.dropIndex(posts_index_name);
+	await client.ft.dropIndex(posts_index_name)
 	await client.ft.create(
 		posts_index_name,
 		{

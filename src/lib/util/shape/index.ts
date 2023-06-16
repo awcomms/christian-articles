@@ -6,7 +6,7 @@ export const shape = (obj: RedisCommandArguments): Record<string, unknown> | und
 		keys.shift();
 		keys.reduce((ao, sub_key, index) => {
 			if (index === keys.length - 1) {
-				ao[sub_key] = obj[key];
+				ao[sub_key] = obj[key][0];
 			} else {
 				if (!ao[sub_key]) {
 					ao[sub_key] = {};

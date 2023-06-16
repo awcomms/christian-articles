@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	const session = await locals.getSession();
 	// const current_version_id = await get_current_version_id(params.id).catch((e) => console.log('ce', e));
 	// console.log('current_version_id', current_version_id)
-	const post = await get<Post>(params.id, ['$.name', '$.body', '$.payment']);
+	const post = await get<Post>(params.id, ['$.name', '$.body', '$.payment', '$.created', '$.updated', '$.creator']);
 	console.log('post_res', post);
 	if (post.payment.required) {
 		if (!session || !session.user?.email) {
