@@ -22,7 +22,7 @@
 		if (!search) return;
 		loading = true;
 		await axios
-			.post('/post/search', { search, page, replied: reference ? reference : undefined })
+			.post('/post/search', { search, page, reference })
 			.then((r) => ({ total: totalItems, documents: posts } = r.data))
 			.catch(() => notify('Error encountered getting results'))
 			.finally(() => (loading = false));

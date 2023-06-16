@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { search } from '$lib/util/post/search';
+import { search } from '$lib/util/redis/post/search';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const args = await request.json();

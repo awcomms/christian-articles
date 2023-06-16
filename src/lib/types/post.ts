@@ -1,30 +1,50 @@
 import type { RedisKey } from '.';
 
-export interface Subscription {
+export interface Payment {
 	required: boolean;
 	duration: number;
 	once: boolean;
 	cost: number;
 	self: boolean;
+	expires?: number | 'never';
 }
+
+export interface UserPayment {
+	// [index: string]: number | boolean,
+	date: number,
+	amount: number,
+	once: boolean,
+	paid_for_once: boolean
+}
+
+export type PostEdit = Omit<EditablePost, 'payment' | 'allow_replies'> & Pick<Post, 'edit'>; //TODO-more precise on edit
+
+export type EditablePost = Omit<Post, 'id' | 'creator' | 'created' | 'updated' | 'edit'>;
 
 export interface Post {
 	id: RedisKey;
+	creator: string;
 	created: Date;
 	updated: Date;
-	user_name: string;
-	user_email: string;
+	edit?: Edit;
 	allow_replies: boolean;
-	subscription: Subscription;
+	payment: Payment;
+	alias: string;
+	alias_plural: string;
+	replies_alias: string;
+	replied_alias: string;
 	name: string;
 	body: string;
-	edit?: Edit;
-	subscription_expires: number | 'never'
+}
+
+export interface PostEntry {
+	id: string;
+	value: Pick<Post, 'name'>;
+	in_replies?: boolean;
+	in_replied?: boolean;
 }
 
 export interface Edit {
-	id: number;
 	to: RedisKey;
-	date: Date;
-	current: number;
+	current: boolean;
 }

@@ -12,14 +12,14 @@
 	export let post: PostEntry,
 		select = false,
 		selected = false;
-	let open = false;
+	// let open = false;
 
 	const dispatch = createEventDispatcher();
 </script>
 
-<Modal hasScrollingContent bind:open passiveModal>
+<!-- <Modal hasScrollingContent bind:open passiveModal>
 	<Post id={post.id} post={post.value} />
-</Modal>
+</Modal> -->
 
 <div on:click on:keydown={() => dispatch('click')} class="post">
 	{#if select}
@@ -33,14 +33,14 @@
 	<div class="name">
 		<Link href="/post/{post.id}">{post.value.name}</Link>
 	</div>
-	<div class="buttons">
+	<!-- <div class="buttons">
 		<Button
 			kind="ghost"
 			on:click={() => (open = true)}
 			icon={View}
 			iconDescription="View post details"
 		/>
-		{#if $page.data.sesssion?.user.email === post.value.user_email}
+		{#if post.value.is_user}
 			<Button kind="ghost" href={`/post/${post.id}/edit`} iconDescription="Edit" icon={Edit} />
 			<Button
 				kind="ghost"
@@ -49,16 +49,16 @@
 			/>
 		{/if}
 		<slot name="buttons" />
-	</div>
+	</div> -->
 </div>
 
 <style lang="sass">
 	@use '@carbon/layout'
 	.name
 		width: 74%
-	.buttons
-		display: flex
-		justify-content: flex-start
+	// .buttons
+	// 	display: flex
+	// 	justify-content: flex-start
 	.post 
 		display: flex
 		align-items: center

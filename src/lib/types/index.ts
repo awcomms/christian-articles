@@ -1,5 +1,3 @@
-import type { Post } from './post';
-
 type Outcome = 'accepted' | 'dismissed';
 export interface BeforeInstallPromptEvent extends Event {
 	readonly platforms: string[];
@@ -10,13 +8,11 @@ export interface BeforeInstallPromptEvent extends Event {
 	}>;
 }
 
-export type CountId = number;
+export type Email = string;
 export type RedisKey = string;
-
-export interface PostEntry {
-	id: string;
-	value: Post;
-}
+export type NumberDate = number;
 
 export type V = number[];
-export type { Post as Post } from './post';
+
+export type { SearchResponse } from './SearchResponse';
+export type { Post, UserPayment, Payment, PostEdit, EditablePost, PostEntry, Edit } from './Post';

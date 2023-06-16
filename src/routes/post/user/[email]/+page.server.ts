@@ -1,6 +1,6 @@
 import { Text } from '$lib/types/filter';
 import { escape } from '$lib/util/escape';
-import { search } from '$lib/util/post/search';
+import { search } from '$lib/util/redis/post/search';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {

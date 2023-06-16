@@ -15,7 +15,7 @@
 		currency: 'NGN' | 'GHS' | 'ZAR' | 'USD';
 
 	const request_payment = () => {
-		PaystackPop.setup({
+		PaystackPop.setup({ //TODO-window_type
 			key,
 			email: $page.data.session?.user?.email,
 			metadata,

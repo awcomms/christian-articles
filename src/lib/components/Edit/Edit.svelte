@@ -2,11 +2,15 @@
 	export let save_loading = false,
 		delete_loading = false,
 		id: string | undefined = undefined,
-		post: Pick<Post, 'name' | 'body' | 'allow_replies' | 'subscription'> = {
+		post: EditablePost = {
 			name: '',
 			body: '',
+			alias: '',
+			alias_plural: '',
+			replied_alias: '',
+			replies_alias: '',
 			allow_replies: false,
-			subscription: {
+			payment: {
 				required: false,
 				cost: 0,
 				once: false,
@@ -24,12 +28,14 @@
 		TextInput,
 		Toggle
 	} from 'carbon-components-svelte';
-	import type { Post } from '$lib/types';
 	import Save from 'carbon-icons-svelte/lib/Save.svelte';
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import OnEnter from '../OnEnter.svelte';
+	import type { EditablePost } from '$lib/types/Post';
+
+	$: loading = save_loading || delete_loading;
 
 	const dispatch = createEventDispatcher();
 
@@ -39,55 +45,65 @@
 <OnEnter on:enter={dispatch_accept} />
 
 <div class="form">
-	<TextInput disabled={save_loading || delete_loading} bind:value={post.name} labelText="Name" />
+	<TextInput disabled={loading} bind:value={post.name} labelText="Name" />
+	<TextInput disabled={loading} bind:value={post.alias} labelText="Alias" />
+	<!-- TODO - explain alias -->
+	<TextInput disabled={loading} bind:value={post.alias_plural} labelText="Alias Plural" />
+	<TextInput
+		disabled={loading}
+		bind:value={post.replies_alias}
+		labelText="Description for Replies"
+	/>
+	<!-- TODO-UX-more_descriptive_labels -->
+	<TextInput
+		disabled={loading}
+		bind:value={post.replied_alias}
+		labelText="Description for Replied"
+	/>
 	<TextArea
 		helperText="Markdown may be used for the body of the post"
-		disabled={save_loading || delete_loading}
+		disabled={loading}
 		bind:value={post.body}
 		labelText="Body"
 	/>
 
-	<p>Subscriptions</p>
+	<p>Payments</p>
 	<Toggle
-		bind:toggled={post.subscription.required}
+		bind:toggled={post.payment.required}
 		labelText="Require users to be subscribed to this post to view it's sub-posts"
 	/>
-	{#if post.subscription?.required}
+	{#if post.payment?.required}
 		<Toggle
-			bind:toggled={post.subscription.self}
+			bind:toggled={post.payment.self}
 			labelText="Require users to be subscribed to this post to view this post itself"
 		/>
 		<NumberInput
 			label="Cost for a user to subscribe to this article in Naira (NGN)"
-			bind:value={post.subscription.cost}
+			bind:value={post.payment.cost}
 		/>
 		<Toggle
-			bind:toggled={post.subscription.once}
+			bind:toggled={post.payment.once}
 			labelText="Allow Users have lifetime access to this post after a single one-time payment"
 		/>
-		{#if !post.subscription.once}
+		{#if !post.payment.once}
 			<NumberInput
-				bind:value={post.subscription.duration}
-				label="Duration of a subscription (milliseconds)"
+				bind:value={post.payment.duration}
+				label="Duration of a payment (milliseconds)"
 			/>
 		{/if}
 	{/if}
 	<Toggle bind:toggled={post.allow_replies} labelText="Allow users to reply to this post" />
 	<ButtonSet stacked>
-		<Button
-			disabled={save_loading || delete_loading}
-			icon={save_loading ? InlineLoading : Save}
-			on:click={dispatch_accept}>Save</Button
+		<Button disabled={loading} icon={save_loading ? InlineLoading : Save} on:click={dispatch_accept}
+			>Save</Button
 		>
 		{#if id}
 			<Button
-				disabled={save_loading || delete_loading}
+				disabled={loading}
 				icon={delete_loading ? InlineLoading : TrashCan}
 				on:click={() => dispatch('delete', post)}>Delete</Button
 			>
-			<Button disabled={save_loading || delete_loading} icon={View} href={`/post/${id}`}
-				>View this item's page</Button
-			>
+			<Button disabled={loading} icon={View} href={`/post/${id}`}>View this item's page</Button>
 		{/if}
 	</ButtonSet>
 </div>

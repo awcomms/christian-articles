@@ -16,7 +16,7 @@
 <div class="article">
 	<div class="title">
 		<h2>{post.name}</h2>
-		{#if $page.data.session?.user?.email === post.user_email}
+		{#if $page.data.session?.user?.email === post.creator}
 			<CuteButton
 				onclick={async () => goto(`/post/${id}/edit`)}
 				iconDescription="Edit this post"
@@ -54,7 +54,6 @@
 			/>
 		{/if}
 	</div>
-	<p>Author: <Link href="/post/user/{post.user_email}">{post.user_email}</Link></p>
 	<p>{post.body}</p>
 </div>
 

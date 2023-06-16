@@ -18,7 +18,7 @@
 
 {#each posts as post}
 	<PostEntry
-		on:click={() => toggle_selected(post.id)}
+		on:select={() => toggle_selected(post.id)}
 		{select}
 		selected={selected.includes(post.id)}
 		on:click

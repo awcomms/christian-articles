@@ -1,7 +1,7 @@
 name .
 body .
 
-subscription accordion
+payment accordion
     required
     if_required
         required for self

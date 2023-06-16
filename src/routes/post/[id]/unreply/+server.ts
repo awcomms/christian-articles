@@ -1,9 +1,9 @@
-import { get } from '$lib/util/get.js';
+import { get } from '$lib/util/redis/get.js';
 import { error, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { RedisKey } from '$lib/types';
-import { isUser } from '$lib/util/post/isUser';
-import { unreply } from '$lib/util/post/unreply';
+import { is_user } from '$lib/util/redis/post/users/is_user';
+import { unreply } from '$lib/util/redis/post/replies/unreply';
 
 export const POST: RequestHandler = async ({ request, params, locals }) => {
 	const targets: RedisKey[] = await request.json();
@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 	const session = await locals.getSession();
 	if (!session?.user?.email) throw redirect(302, '/auth');
 
-	if (!(await isUser(params.id, session.user.email)))
+	if (!(await is_user(params.id, session.user.email)))
 		throw error(
 			401,
 			`You may not unreply with this post, for you do not own it, neither are you a contributor`
@@ -23,11 +23,11 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 		// 		(r) => r.allow_replies
 		// 	))
 		// )
-			// if (!isUser(target, session.user.email))
-			// 	throw error(
-			// 		401,
-			// 		`You may not unreply  specified post ${target}, for you do not own it, neither are you a contributor`
-			// 	);
+		// if (!is_user(target, session.user.email))
+		// 	throw error(
+		// 		401,
+		// 		`You may not unreply  specified post ${target}, for you do not own it, neither are you a contributor`
+		// 	);
 
 		await unreply({ post, target });
 	}
