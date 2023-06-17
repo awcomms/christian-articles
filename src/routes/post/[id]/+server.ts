@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { del } from '$lib/util/redis/del';
-import { update } from '$lib/util/update';
+import { update } from '$lib/util/redis/update';
 import { get_root_id } from '$lib/util/redis/post/get_root_id';
 import { exists } from '$lib/util/redis/exists';
 import { is_user } from '$lib/util/redis/post/users/is_user';

@@ -7,14 +7,15 @@ export interface Payment {
 	cost: number;
 	self: boolean;
 	expires?: number | 'never';
+	// users?: {[index:string]: UserPayment}
 }
 
 export interface UserPayment {
 	// [index: string]: number | boolean,
-	date: number,
-	amount: number,
-	once: boolean,
-	paid_for_once: boolean
+	date: number;
+	amount: number;
+	once: boolean;
+	paid_for_once: boolean;
 }
 
 export type PostEdit = Omit<EditablePost, 'payment' | 'allow_replies'> & Pick<Post, 'edit'>; //TODO-more precise on edit
@@ -31,8 +32,8 @@ export interface Post {
 	payment: Payment;
 	alias: string;
 	alias_plural: string;
-	replies_alias: string;
-	replied_alias: string;
+	replies_description: string;
+	replied_description: string;
 	name: string;
 	body: string;
 }

@@ -1,7 +1,6 @@
 import { get } from '$lib/util/redis/get';
 import { client } from '$lib/util/redis';
 import { get_root_id } from './get_root_id';
-import type { RedisJSON } from '@redis/json/dist//commands';
 import type { UserPayment } from '$lib/types/Post';
 
 export interface Args {

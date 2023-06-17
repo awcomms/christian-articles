@@ -1,10 +1,10 @@
-import { embedding_field_name, embedding_model, items_per_page } from '$lib/constants';
+import { embedding_field_name, items_per_page } from '$lib/constants';
 import type { SearchOptions } from 'redis';
 import { client, float32Buffer } from '.';
-import { openai } from '../openai';
 import type { Filter } from '$lib/types/filter';
 import { NumberRange, SingleNumber, Tag, Text } from '$lib/types/filter';
 import type { SearchResponse } from '$lib/types/SearchResponse';
+import { embedding } from '$lib/util/embedding';
 
 export interface SearchParams {
 	index: string;
@@ -66,16 +66,7 @@ export const search = async <T>({
 		query += `=>[KNN 7 @${embedding_field_name} $BLOB${filters ? ' HYBRID_POLICY ADHOC_BF' : ''}]`; //TODO set ADHOC_BF only if filters
 		options.PARAMS = {
 			BLOB:
-				typeof search === 'string'
-					? float32Buffer(
-							await openai
-								.createEmbedding({ model: embedding_model, input: search })
-								.then((r) => r.data.data[0].embedding)
-								.catch((e) => {
-									throw new Error(`createEmbedding error, ${e}`);
-								})
-					  )
-					: float32Buffer(search)
+				typeof search === 'string' ? float32Buffer(await embedding(search)) : float32Buffer(search)
 		};
 		options.SORTBY = {
 			BY: `__${embedding_field_name}_score`,

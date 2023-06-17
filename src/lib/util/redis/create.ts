@@ -1,18 +1,12 @@
 import { embedding_model, ids_hash } from '$lib/constants';
 import { openai } from '$lib/util/openai';
 import { client } from '$lib/util/redis';
+import { embedding } from '$lib/util/embedding';
 
 const build_id = (index: string, id: number) => `${index}:${id}`;
 
 export const add_embedding = async (data: object) => {
-	const v = await openai
-		.createEmbedding({ model: embedding_model, input: JSON.stringify(data) })
-		.then((r) => {
-			return r.data.data[0].embedding;
-		})
-		.catch((e) => {
-			throw new Error(`createEmbedding error, ${e}`);
-		});
+	const v = await embedding(JSON.stringify(data))
 	return { v, ...data };
 };
 
