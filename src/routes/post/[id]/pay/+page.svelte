@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-
+	import { goto } from '$app/navigation';
 	import Paystack from '$lib/components/Paystack.svelte';
 	import { friendly_milliseconds } from '$lib/util/friendly_milliseconds';
+	import { notify } from '$lib/util/notify';
+	import type { ArgsMetadata } from '$lib/util/redis/post/record_payment';
+	import { Button } from 'carbon-components-svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	const metadata: ArgsMetadata | null = data.id && data.once ? { id: data.id, once: data.once } : null;
 </script>
 
 <div class="label">Post name:</div>
@@ -19,9 +23,23 @@
 		: `'s ${data.replies_description}'`}
 </p>
 
-<Paystack
-	metadata={{ endpoint: $page.url.toString(), args: { id: data.id, amount: data.cost } }}
-	amount={data.cost || 0}
-	currency="NGN"
-	button_props={{}}>Click here to pay for access to this post</Paystack
->
+{#if metadata}
+	<Paystack
+		{metadata}
+		amount={data.cost || 0}
+		currency="NGN"
+		on:verify={({ detail }) => {
+			if (detail) {
+				const url = data.self ? `/post/${data.id}` : `/post/${data.id}/replies`;
+				goto(url);
+			} else {
+				notify('Payment Verification returned false'); //TODO
+			}
+		}}
+		on:error={({ detail }) => notify(detail)}
+		button_props={{}}>Click here to pay for access to this post</Paystack
+	>
+{:else}
+	<p>Encountered an error trying loading post details</p>
+	<Button size="small" on:click={window.location.reload}>Reload page</Button>
+{/if}

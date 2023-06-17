@@ -1,6 +1,4 @@
 _learn
-    verify payment pastack
-    notify function
     find out why ```
         export class EscapedEmail {
             value: string;
@@ -26,6 +24,8 @@ _learn
     goto previous page in component
     javascript disabled
 todo
+    verify payment pastack
+    notify function
     specific type for PostId
     check
         what a boolean looks like in a stored redis json value and how to filter by it in ft.search

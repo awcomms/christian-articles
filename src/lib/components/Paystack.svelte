@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { PUBLIC_PAYSTACK_PK_LIVE, PUBLIC_PAYSTACK_PK_TEST, PUBLIC_PAYSTACK_TEST } from '$env/static/public';
+	import axios from 'axios';
 	import { Button } from 'carbon-components-svelte';
 	import type { ButtonProps } from 'carbon-components-svelte/types/Button/Button.svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -23,8 +24,8 @@
 			channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
 			amount: amount * 100,
 			ref: v4(),
-			callback: (response: {reference: string}) => {
-				dispatch('paid', response.reference);
+			callback: async(r: {reference: string}) => {
+				await axios.post('/paystack/verify', r.reference).then(r => dispatch('verified', r.data)).catch(e => dispatch('error', e.response.data))
 			},
 			onClose: () => dispatch('close')
 		});

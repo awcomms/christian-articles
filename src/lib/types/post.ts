@@ -13,7 +13,7 @@ export interface Payment {
 export interface UserPayment {
 	// [index: string]: number | boolean,
 	date: number;
-	amount: number;
+	cost: number;
 	once: boolean;
 	paid_for_once: boolean;
 }

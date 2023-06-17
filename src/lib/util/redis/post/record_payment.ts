@@ -3,18 +3,20 @@ import { client } from '$lib/util/redis';
 import { get_root_id } from './get_root_id';
 import type { UserPayment } from '$lib/types/Post';
 
+export type ArgsMetadata = Pick<Args, 'id' | 'once'>
+
 export interface Args {
 	email: string;
+	date: number;
 	id: string;
 	once: boolean;
-	amount: number;
-	date: number;
+	cost: number;
 }
 
 export const record_payment = async ({
 	email,
 	id,
-	amount,
+	cost,
 	once: paid_for_once,
 	date
 }: Args): Promise<void> => {
@@ -25,6 +27,6 @@ export const record_payment = async ({
 		'$.payment.once'
 	]);
 	if (!required) throw `Payment not required for ${id}`;
-	const user_payment: UserPayment = { date, amount, paid_for_once, once };
+	const user_payment: UserPayment = { date, cost, paid_for_once, once };
 	client.json.set(id, `$.payment.users.${email}`, { ...user_payment });
 };
