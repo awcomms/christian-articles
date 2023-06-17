@@ -1,9 +1,8 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { get_root_id } from '$lib/util/redis/post/get_root_id';
-import { get_current_version_id } from '$lib/util/redis/post/get_current_version_id';
 import { get } from '$lib/util/redis/get';
-import { content_attributes, editable_attributes } from '$lib/constants';
+import { editable_attributes } from '$lib/constants';
 import { is_user } from '$lib/util/redis/post/users/is_user';
 import type { Post } from '$lib/types';
 import { exists } from '$lib/util/redis/exists';
@@ -20,7 +19,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 	const root_id = await get_root_id(params.id);
 	if (!root_id) throw error(404, `Root of ${params.id} not found`);
-	const post = await get<Post>(root_id, editable_attributes);
+	const post = await get<Post>(root_id, editable_attributes.map(a => `$.${a}`));
 	return {
 		id: params.id,
 		post

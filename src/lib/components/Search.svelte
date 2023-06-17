@@ -26,7 +26,6 @@
 			.then((r) => ({ total: totalItems, documents: posts } = r.data))
 			.catch(() => notify('Error encountered getting results'))
 			.finally(() => (loading = false));
-		console.log('spd', posts);
 	};
 </script>
 

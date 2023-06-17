@@ -1,4 +1,17 @@
 _learn
+    notify function
+    find out why ```
+        export class EscapedEmail {
+            value: string;
+            constructor(email: string) {
+                this.value = escape_email(email);
+            }
+        }
+
+        const email = new EscapedEmail("example@email.com")
+
+        const path = `$.users.${email}`
+    ``` works
     typescript - combine two types
     get the keys of a typescript interface into an Array?
     how typescript extends works
@@ -12,6 +25,7 @@ _learn
     goto previous page in component
     javascript disabled
 todo
+    specific type for PostId
     check
         what a boolean looks like in a stored redis json value and how to filter by it in ft.search
     tests

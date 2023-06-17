@@ -16,7 +16,7 @@
 		? 'one time payment'
 		: `payment every ${friendly_milliseconds(data.duration || 0)}`} of {data.cost} NGN to access it{data.self
 		? ''
-		: `'s ${data.replies_alias}'`}
+		: `'s ${data.replies_description}'`}
 </p>
 
 <Paystack

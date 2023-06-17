@@ -3,10 +3,10 @@ import { client } from '.';
 import { slim } from '../shape/slim';
 import { shape } from '../shape';
 
-export const get = async <Type>(id: string, path: string[], slim_shape = true): Promise<Type> => {
+export const get = async <Type>(key: string, path: string[], slim_shape = true): Promise<Type> => {
 	const isPathRes = check_JSONPaths(path);
 	if (!isPathRes.result) throw { message: 'not_path', ...isPathRes };
-	const args: [string, { path: string[] }?] = [id];
+	const args: [string, { path: string[] }?] = [key];
 	if (path) args.push({ path });
 	return await client.json.get(...args).then((r) => {
 		return slim_shape ? slim(r) : shape(r);

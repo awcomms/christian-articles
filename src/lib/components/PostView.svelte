@@ -9,15 +9,17 @@
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import Share from 'carbon-icons-svelte/lib/Share.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
-	import { unescape } from '$lib/util/unescape';
+	import { unescape_email } from '$lib/util/unescape_email';
 
-	export let id: RedisKey, post: Post;
+	export let id: RedisKey, post: Post, is_user: boolean;
+
+	console.log(post)
 </script>
 
 <div class="article">
 	<div class="title">
 		<h2>{post.name}</h2>
-		{#if $page.data.session?.user?.email === unescape(post.creator)}
+		{#if is_user}
 			<CuteButton
 				onclick={async () => goto(`/post/${id}/edit`)}
 				iconDescription="Edit this post"

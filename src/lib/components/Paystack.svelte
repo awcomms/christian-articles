@@ -23,7 +23,7 @@
 			channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
 			amount: amount * 100,
 			ref: v4(),
-			callback: (response) => {
+			callback: (response: {reference: string}) => {
 				dispatch('paid', response.reference);
 			},
 			onClose: () => dispatch('close')

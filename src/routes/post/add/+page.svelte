@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Edit from '$lib/components/Edit/Edit.svelte';
-	import { escape } from '$lib/util/escape';
+	import { escape_email } from '$lib/util/escape_email';
 	import { notify } from '$lib/util/notify';
 	import axios from 'axios';
 
@@ -15,13 +15,11 @@
 			return;
 		}
 		loading = true;
-		console.log($page.data.session.user);
 		await axios
 			.post('/post', {
-				...e.detail,
+				...e.detail
 			})
 			.then(async (r) => {
-				console.log(r.data);
 				goto(`/post/${r.data}`);
 			})
 			.catch((e) => notify(`Error encountered ${e}`))

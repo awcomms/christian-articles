@@ -1,3 +1,5 @@
+import { escape_email } from '$lib/util/escape_email';
+
 type Outcome = 'accepted' | 'dismissed';
 export interface BeforeInstallPromptEvent extends Event {
 	readonly platforms: string[];
@@ -8,9 +10,16 @@ export interface BeforeInstallPromptEvent extends Event {
 	}>;
 }
 
-export type Email = string;
 export type RedisKey = string;
 export type NumberDate = number;
+
+export type Email = string;
+export class EscapedEmail {
+	value: string;
+	constructor(email: string) {
+		this.value = escape_email(email);
+	}
+}
 
 export type V = number[];
 

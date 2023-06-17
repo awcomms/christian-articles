@@ -26,8 +26,15 @@
 		save_loading = true;
 		await axios
 			.put(`/post/${data.id}`, { id: data.id, data: { ...e.detail } })
-			.then((r) => notify('Edit saved'))
-			.catch((e) => notify(`An error occured: ${e}`))
+			.then((r) => {
+				console.log('tr', r.data);
+				notify('Edit saved');
+			})
+			.catch((e) => {
+				const error = e.response.data;
+				console.log('e', error);
+				notify(`An error occured: ${error}`);
+			})
 			.finally(() => (save_loading = false));
 	};
 </script>

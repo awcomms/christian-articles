@@ -71,6 +71,9 @@ export const search = async <T>({
 							await openai
 								.createEmbedding({ model: embedding_model, input: search })
 								.then((r) => r.data.data[0].embedding)
+								.catch((e) => {
+									throw new Error(`createEmbedding error, ${e}`);
+								})
 					  )
 					: float32Buffer(search)
 		};

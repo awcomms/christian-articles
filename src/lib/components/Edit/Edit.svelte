@@ -7,8 +7,8 @@
 			body: '',
 			alias: '',
 			alias_plural: '',
-			replied_alias: '',
-			replies_alias: '',
+			replied_description: '',
+			replies_description: '',
 			allow_replies: false,
 			payment: {
 				required: false,
@@ -46,18 +46,16 @@
 
 <div class="form">
 	<TextInput disabled={loading} bind:value={post.name} labelText="Name" />
-	<TextInput disabled={loading} bind:value={post.alias} labelText="Alias" />
-	<!-- TODO - explain alias -->
-	<TextInput disabled={loading} bind:value={post.alias_plural} labelText="Alias Plural" />
+	<!-- <TextInput disabled={loading} bind:value={post.alias} labelText="Alias" />
+	<TextInput disabled={loading} bind:value={post.alias_plural} labelText="Alias Plural" /> -->
 	<TextInput
 		disabled={loading}
-		bind:value={post.replies_alias}
+		bind:value={post.replies_description}
 		labelText="Description for Replies"
 	/>
-	<!-- TODO-UX-more_descriptive_labels -->
 	<TextInput
 		disabled={loading}
-		bind:value={post.replied_alias}
+		bind:value={post.replied_description}
 		labelText="Description for Replied"
 	/>
 	<TextArea

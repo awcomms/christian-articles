@@ -1,1 +1,0 @@
-export const escape = (input: string) => input.replace(/[@\s]/g, '\\$&');
