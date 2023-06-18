@@ -5,6 +5,7 @@ import type { Filter } from '$lib/types/filter';
 import { NumberRange, SingleNumber, Tag, Text } from '$lib/types/filter';
 import type { SearchResponse } from '$lib/types/SearchResponse';
 import { embedding } from '$lib/util/embedding';
+import { slim } from '../shape/slim';
 
 export interface SearchParams {
 	index: string;
@@ -18,7 +19,7 @@ export interface SearchParams {
 export const search = async <T>({
 	index,
 	page,
-	filters,
+	// filters,
 	count,
 	search,
 	RETURN
@@ -34,36 +35,38 @@ export const search = async <T>({
 			: { from: page > 1 ? (page - 1) * items_per_page : 0, size: items_per_page };
 	}
 
-	let query = '';
+	let query = '*';
+	let extra_args = ''; // ' HYBRID_POLICY ADHOC_BF';
 
-	if (filters && filters.length) {
-		filters.forEach((filter) => {
-			switch (filter.constructor) {
-				case Tag:
-					query += ` @${filter.field}:{${(<Tag>filter).values.map(
-						(v, i) => `${v}${i === v.length - 1 ? '' : ' |'}`
-					)}}"`;
-					break;
-				case SingleNumber:
-					query += ` @${filter.field}:[${(<SingleNumber>filter).value} ${
-						(<SingleNumber>filter).value
-					}]`;
-					break;
-				case NumberRange:
-					query += ` @${filter.field}:[${(<NumberRange>filter).start} ${
-						(<NumberRange>filter).end
-					}]`;
-					break;
-				case Text:
-					query += ` @${(<Text>filter).field}:(${(<Text>filter).value})`;
-			}
-		});
-	} else {
-		query = '*';
-	}
+	// if (filters && filters.length) {
+	// 	// filters.forEach((filter) => {
+	// 	// 	switch (filter.constructor) {
+	// 	// 		case Tag:
+	// 	// 			query += ` @${filter.field}:{${(<Tag>filter).values.map(
+	// 	// 				(v, i) => `${v}${i === v.length - 1 ? '' : ' |'}`
+	// 	// 			)}}"`;
+	// 	// 			break;
+	// 	// 		case SingleNumber:
+	// 	// 			query += ` @${filter.field}:[${(<SingleNumber>filter).value} ${
+	// 	// 				(<SingleNumber>filter).value
+	// 	// 			}]`;
+	// 	// 			break;
+	// 	// 		case NumberRange:
+	// 	// 			query += ` @${filter.field}:[${(<NumberRange>filter).start} ${
+	// 	// 				(<NumberRange>filter).end
+	// 	// 			}]`;
+	// 	// 			break;
+	// 	// 		case Text:
+	// 	// 			query += ` @${(<Text>filter).field}:(${(<Text>filter).value})`;
+	// 	// 	}
+	// 	// });
+	// 	extra_args = ' HYBRID_POLICY ADHOC_BF';
+	// } else {
+	// 	query = '*';
+	// }
 
 	if (search) {
-		query += `=>[KNN 7 @${embedding_field_name} $BLOB${filters ? ' HYBRID_POLICY ADHOC_BF' : ''}]`; //TODO set ADHOC_BF only if filters
+		query += `=>[KNN 7 @${embedding_field_name} $BLOB${extra_args}]`; //TODO set ADHOC_BF only if filters
 		options.PARAMS = {
 			BLOB:
 				typeof search === 'string' ? float32Buffer(await embedding(search)) : float32Buffer(search)
@@ -79,5 +82,11 @@ export const search = async <T>({
 		};
 	}
 
-	return await client.ft.search(index, query, options);
+	const res = await client.ft.search(index, query, options);
+	res.documents = res.documents.map((r) => {
+		r.value = slim(r.value, true);
+		console.log('rrv', r.value)
+		return r;
+	});
+	return res;
 };

@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		'$.replied_description'
 	]);
 	if (!post) throw error(500, `We experienced an error getting ${params.id}`);
-	if (post.payment.required) {
+	if (post.payment?.required) {
 		if (!session || !session.user?.email) {
 			throw redirect(302, `pay`);
 		}

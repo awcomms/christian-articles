@@ -1,4 +1,11 @@
 <script lang="ts">
+	const payment = {
+		required: false,
+		cost: 0,
+		once: false,
+		duration: 1,
+		self: false
+	};
 	export let save_loading = false,
 		delete_loading = false,
 		id: string | undefined = undefined,
@@ -10,13 +17,7 @@
 			replied_description: '',
 			replies_description: '',
 			allow_replies: false,
-			payment: {
-				required: false,
-				cost: 0,
-				once: false,
-				duration: 1,
-				self: false
-			}
+			payment
 		};
 
 	import {
@@ -55,6 +56,8 @@
 				error = e;
 			});
 	};
+
+	if (!post.payment) post.payment = payment;
 </script>
 
 <OnEnter on:enter={dispatch_accept} />
@@ -97,10 +100,13 @@
 	/>
 
 	<p>Payments</p>
-	<Toggle
-		bind:toggled={post.payment.required}
-		labelText="Require users to be subscribed to this post to view it's sub-posts"
-	/>
+	{#if post.payment}
+		<!-- TODO-nah 👆 -->
+		<Toggle
+			bind:toggled={post.payment.required}
+			labelText="Require users to be subscribed to this post to view it's sub-posts"
+		/>
+	{/if}
 	{#if post.payment?.required}
 		<Toggle
 			bind:toggled={post.payment.self}

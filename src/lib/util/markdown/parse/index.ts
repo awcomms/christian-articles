@@ -5,6 +5,7 @@ import { markedHighlight } from 'marked-highlight';
 import katex from 'marked-katex-extension';
 import { mangle } from 'marked-mangle';
 import linkify_it from 'marked-linkify-it';
+import admonition from 'marked-admonition-extension'
 import hljs from 'highlight.js';
 
 // export const marked = new Marked
@@ -21,6 +22,7 @@ export const extensions = [
 			return hljs.highlight(code, { language }).value;
 		}
 	}),
+	admonition,
 	katex({
 		throwOnError: false
 	}),
