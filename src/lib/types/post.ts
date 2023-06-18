@@ -25,6 +25,7 @@ export type EditablePost = Omit<Post, 'id' | 'creator' | 'created' | 'updated' |
 export interface Post {
 	id: RedisKey;
 	creator: string;
+	html: string;
 	created: Date;
 	updated: Date;
 	edit?: Edit;

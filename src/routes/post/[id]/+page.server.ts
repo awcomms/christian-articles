@@ -1,18 +1,20 @@
 import type { PageServerLoad } from './$types';
 import { get } from '$lib/util/redis/get';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { allowed_to_view } from '$lib/util/redis/post/allowed/allowed_to_view';
 import { EscapedEmail, type Post } from '$lib/types';
 import { paid } from '$lib/util/redis/post/paid';
 import { requires_payment } from '$lib/util/redis/post/requires_payment';
 import { is_user } from '$lib/util/redis/post/users/is_user';
+import { exists } from '$lib/util/redis';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const session = await locals.getSession();
 	// const current_version_id = await get_current_version_id(params.id).catch((e) => console.log('ce', e));
+	if (!(await exists(params.id))) throw error(401, '${params.id} not found');
 	const post = await get<Post>(params.id, [
 		'$.name',
-		'$.body',
+		'$.html',
 		'$.payment',
 		'$.created',
 		'$.updated',
@@ -20,6 +22,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		'$.replies_description',
 		'$.replied_description'
 	]);
+	if (!post) throw error(500, `We experienced an error getting ${params.id}`);
 	if (post.payment.required) {
 		if (!session || !session.user?.email) {
 			throw redirect(302, `pay`);

@@ -1,6 +1,12 @@
 <script lang="ts">
 	import type { Post, RedisKey } from '$lib/types';
-	import { Button, CopyButton, Link } from 'carbon-components-svelte';
+	import {
+		Button,
+		CopyButton,
+		InlineLoading,
+		InlineNotification,
+		Link
+	} from 'carbon-components-svelte';
 	import CuteButton from './CuteButton.svelte';
 	import { page } from '$app/stores';
 	import { client_delete } from '$lib/util/client_del';
@@ -9,11 +15,11 @@
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import Share from 'carbon-icons-svelte/lib/Share.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
-	import { unescape_email } from '$lib/util/unescape_email';
+	import { parse } from '$lib/util/markdown/parse/web';
 
 	export let id: RedisKey, post: Post, is_user: boolean;
 
-	console.log(post)
+	console.log(post);
 </script>
 
 <div class="article">
@@ -57,7 +63,7 @@
 			/>
 		{/if}
 	</div>
-	<p>{post.body}</p>
+	<p>{@html post.html}</p>
 </div>
 
 <style lang="sass">

@@ -23,6 +23,7 @@
 		Button,
 		ButtonSet,
 		InlineLoading,
+		InlineNotification,
 		NumberInput,
 		TextArea,
 		TextInput,
@@ -34,15 +35,45 @@
 	import { createEventDispatcher } from 'svelte';
 	import OnEnter from '../OnEnter.svelte';
 	import type { EditablePost } from '$lib/types/Post';
+	import { parse } from '$lib/util/markdown/parse/web';
+	import { sanitize_string, sanitize_object } from '$lib/util/sanitize';
 
 	$: loading = save_loading || delete_loading;
 
+	let error = '';
 	const dispatch = createEventDispatcher();
 
-	const dispatch_accept = () => dispatch('accept', post);
+	const dispatch_accept = async () => {
+		const sanitized = sanitize_object(post);
+		await parse(sanitized.body)
+			.then((t) => {
+				sanitized.html = sanitize_string(t);
+				dispatch('accept', sanitized);
+			})
+			.catch((e) => {
+				console.log(e);
+				error = e;
+			});
+	};
 </script>
 
 <OnEnter on:enter={dispatch_accept} />
+
+{#if error}
+	{#if error === 'timeout'}
+		<InlineNotification
+			hideCloseButton
+			title="Error:"
+			subtitle="Took too long to parse the content body field. Try making the post shorter"
+		/>
+	{:else}
+		<InlineNotification
+			hideCloseButton
+			title="Error:"
+			subtitle="Encountered an error parse the content of the body field"
+		/>
+	{/if}
+{/if}
 
 <div class="form">
 	<TextInput disabled={loading} bind:value={post.name} labelText="Name" />
@@ -92,8 +123,10 @@
 	{/if}
 	<Toggle bind:toggled={post.allow_replies} labelText="Allow users to reply to this post" />
 	<ButtonSet stacked>
-		<Button disabled={loading} icon={save_loading ? InlineLoading : Save} on:click={dispatch_accept}
-			>Save</Button
+		<Button
+			disabled={loading || Boolean(error)}
+			icon={save_loading ? InlineLoading : Save}
+			on:click={dispatch_accept}>Save</Button
 		>
 		{#if id}
 			<Button

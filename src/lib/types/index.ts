@@ -1,4 +1,5 @@
 import { escape_email } from '$lib/util/escape_email';
+import type { RedisJSON } from '@redis/json/dist//commands';
 
 type Outcome = 'accepted' | 'dismissed';
 export interface BeforeInstallPromptEvent extends Event {
@@ -10,6 +11,7 @@ export interface BeforeInstallPromptEvent extends Event {
 	}>;
 }
 
+export type KeyedObject = { [index: string]: RedisJSON };
 export type RedisKey = string;
 export type NumberDate = number;
 
