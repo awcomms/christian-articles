@@ -34,7 +34,7 @@
 	import View from 'carbon-icons-svelte/lib/View.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import OnEnter from '../OnEnter.svelte';
+	import OnEnter from '$lib/components/OnEnter.svelte';
 	import type { EditablePost } from '$lib/types/Post';
 	import { parse } from '$lib/util/markdown/parse/web';
 	import { sanitize_string, sanitize_object } from '$lib/util/sanitize';
@@ -46,7 +46,7 @@
 
 	const dispatch_accept = async () => {
 		const sanitized = sanitize_object(post);
-		await parse(sanitized.body)
+		await parse(sanitized.body as string)
 			.then((t) => {
 				sanitized.html = sanitize_string(t);
 				dispatch('accept', sanitized);

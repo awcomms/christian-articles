@@ -3,8 +3,6 @@
 
 import { BeforeInstallPromptEvent } from "$lib/types";
 
-declare module 'marked-extended-tables'
-
 declare global {
 	interface WindowEventMap {
 		beforeinstallprompt: BeforeInstallPromptEvent;

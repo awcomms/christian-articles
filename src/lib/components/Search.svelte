@@ -1,28 +1,35 @@
 <script lang="ts">
 	import { TextInput, Button, Row, Loading } from 'carbon-components-svelte';
-	import type { PostEntry, RedisKey } from '$lib/types';
+	import type { PostSearchDocument, RedisKey } from '$lib/types';
 	import PostsPagination from './PostsPagination.svelte';
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
 	import axios from 'axios';
 	import { notify } from '$lib/util/notify';
 	import OnEnter from './OnEnter.svelte';
+	import { onMount } from 'svelte';
+	import type { Filters } from '$lib/types/filter';
 
 	export let select = false,
-		reference: RedisKey | undefined = undefined,
+		filters: Filters = [],
 		selected: RedisKey[] = [];
 	let loading = false,
 		search: string,
+		searched = false,
 		totalItems: number,
-		posts: PostEntry[] = [],
+		posts: PostSearchDocument[] = [],
 		page: number = 1;
 
 	$: get(page);
 
+	onMount(() => search_input_ref.focus());
+
+	let search_input_ref: HTMLInputElement;
 	const get = async (page: number) => {
 		if (!search) return;
+		searched = true;
 		loading = true;
 		await axios
-			.post('/post/search', { search, page, reference })
+			.post('/post/search', { search, page, filters })
 			.then((r) => ({ total: totalItems, documents: posts } = r.data))
 			.catch(() => notify('Error encountered getting results'))
 			.finally(() => (loading = false));
@@ -32,7 +39,7 @@
 <OnEnter on:enter={() => get(page)} />
 
 <Row>
-	<TextInput bind:value={search} />
+	<TextInput bind:ref={search_input_ref} bind:value={search} />
 	<Button size="field" on:click={() => get(page)} iconDescription="Search" icon={Search} />
 </Row>
 
@@ -50,4 +57,19 @@
 		{posts}
 		{page}
 	/>
+{:else}
+	<div class="cta">
+		<Button kind="ghost" size="xl" on:click={() => search_input_ref.focus()}
+			>{searched
+				? 'It appears there are no results for your search, try a different search'
+				: 'Search for an article'}</Button
+		>
+	</div>
 {/if}
+
+<style lang="sass">
+	.cta
+		display: flex
+		align-items: center
+		justify-content: center
+</style>

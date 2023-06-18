@@ -2,6 +2,7 @@ import { escape_email } from '$lib/util/escape_email';
 import type { RedisJSON } from '@redis/json/dist//commands';
 
 type Outcome = 'accepted' | 'dismissed';
+
 export interface BeforeInstallPromptEvent extends Event {
 	readonly platforms: string[];
 	readonly userChoice: Promise<Outcome>;
@@ -12,6 +13,9 @@ export interface BeforeInstallPromptEvent extends Event {
 }
 
 export type KeyedObject = { [index: string]: RedisJSON };
+export interface SearchDocumentValue {
+	[key: string]: string | number | null | Array<SearchDocumentValue> | SearchDocumentValue;
+}
 export type RedisKey = string;
 export type NumberDate = number;
 
@@ -26,4 +30,13 @@ export class EscapedEmail {
 export type V = number[];
 
 export type { SearchResponse } from './SearchResponse';
-export type { Post, UserPayment, Payment, PostEdit, EditablePost, PostEntry, Edit } from './Post';
+export type {
+	Post,
+	UserPayment,
+	Payment,
+	PostEdit,
+	EditablePost,
+	PostSearchDocument,
+	PostItem,
+	Edit
+} from './Post';

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { Post, PostEntry, RedisKey } from '$lib/types';
+	import type { Post, PostSearchDocument, RedisKey } from '$lib/types';
 	import { Button, ButtonSet, InlineLoading, Modal } from 'carbon-components-svelte';
 	import Reply from 'carbon-icons-svelte/lib/Reply.svelte';
 	import Context from './Context.svelte';
@@ -9,7 +9,7 @@
 	import Edit from '$lib/components/Edit/Edit.svelte';
 
 	let id: RedisKey,
-		posts: PostEntry[],
+		posts: PostSearchDocument[],
 		totalItems: number,
 		select_open = false,
 		loading = false,
@@ -50,7 +50,7 @@
 
 	<ButtonSet stacked>
 		<Button on:click={() => (select_open = true)}>{select_cta}</Button>
-		<Button on:click={() => (select_open = true)}>{create_cta}</Button>
+		<Button on:click={() => (new_open = true)}>{create_cta}</Button>
 	</ButtonSet>
 {/if}
 

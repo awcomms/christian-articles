@@ -1,16 +1,17 @@
 <script lang="ts">
-	import type { PostEntry, RedisKey } from '$lib/types';
+	import type { PostSearchDocument, RedisKey } from '$lib/types';
 	import axios from 'axios';
 	import Posts from './Posts.svelte';
 	import { Loading, Pagination } from 'carbon-components-svelte';
 	import { notify } from '$lib/util/notify';
 
-	export let filters: Record<string, string> = {}, run_get = true,
+	export let filters: Record<string, string> = {},
+		run_get = true,
 		page: number = 1,
 		totalItems: number,
 		select = false,
 		selected: RedisKey[] = [],
-		posts: PostEntry[];
+		posts: PostSearchDocument[];
 
 	let loading = false;
 
@@ -31,7 +32,7 @@
 <Pagination
 	on:update
 	on:update={async ({ detail }) => {
-		if (!run_get) return
+		if (!run_get) return;
 		loading = true;
 		await get(detail.page).then(() => (loading = false));
 	}}

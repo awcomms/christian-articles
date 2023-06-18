@@ -6,4 +6,4 @@
 	import Post from '$lib/components/Post.svelte';
 </script>
 
-<Post {...data}  />
+<Post {...data.props}  />

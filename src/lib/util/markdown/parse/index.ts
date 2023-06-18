@@ -1,11 +1,15 @@
+// declare module 'marked-bidi' {
+// 	export default (): marked.MarkedExtension
+// }
+
 import { marked } from 'marked';
-import bidi from 'marked-bidi';
-import extended_tables from 'marked-extended-tables';
 import { markedHighlight } from 'marked-highlight';
 import katex from 'marked-katex-extension';
+import bidi from 'marked-bidi';
+import extended_tables from 'marked-extended-tables';
 import { mangle } from 'marked-mangle';
 import linkify_it from 'marked-linkify-it';
-import admonition from 'marked-admonition-extension'
+import admonition from 'marked-admonition-extension';
 import hljs from 'highlight.js';
 
 // export const marked = new Marked

@@ -1,4 +1,5 @@
 import type { RedisKey } from '.';
+import type { Document } from './SearchResponse';
 
 export interface Payment {
 	required: boolean;
@@ -25,12 +26,12 @@ export type EditablePost = Omit<Post, 'id' | 'creator' | 'created' | 'updated' |
 export interface Post {
 	id: RedisKey;
 	creator: string;
-	html: string;
+	html?: string;
 	created: Date;
 	updated: Date;
 	edit?: Edit;
 	allow_replies: boolean;
-	payment: Payment;
+	payment?: Payment;
 	alias: string;
 	alias_plural: string;
 	replies_description: string;
@@ -39,12 +40,8 @@ export interface Post {
 	body: string;
 }
 
-export interface PostEntry {
-	id: string;
-	value: Pick<Post, 'name'>;
-	in_replies?: boolean;
-	in_replied?: boolean;
-}
+export type PostSearchDocument = Document<PostItem>;
+export type PostItem = Pick<Post, 'name'>;
 
 export interface Edit {
 	to: RedisKey;

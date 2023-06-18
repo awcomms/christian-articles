@@ -47,7 +47,7 @@ export const stringStore = (key = '', initialValue = '') => {
 	return s;
 };
 
-export const arrayStore = <Type>(key = '', initialValue: Array<Type>) => {
+export const arrayStore = <Type>(key = '', initialValue: Array<Type> = []) => {
 	let previousValue: Array<Type>;
 	if (browser) {
 		const fromLocalStorage = localStorage.getItem(key);

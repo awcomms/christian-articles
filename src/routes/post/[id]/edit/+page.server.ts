@@ -4,7 +4,7 @@ import { get_root_id } from '$lib/util/redis/post/get_root_id';
 import { get } from '$lib/util/redis/get';
 import { editable_attributes } from '$lib/constants';
 import { is_user } from '$lib/util/redis/post/users/is_user';
-import type { Post } from '$lib/types';
+import { EscapedEmail, type Post } from '$lib/types';
 import { exists } from '$lib/util/redis/exists';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!session?.user?.email) {
 		throw redirect(303, '/auth');
 	}
-	if (await !is_user(session.user.email, params.id)) {
+	if (await !is_user(params.id, new EscapedEmail(session.user.email))) {
 		throw error(401, `Logged in user is not authorized to access this page`);
 	}
 

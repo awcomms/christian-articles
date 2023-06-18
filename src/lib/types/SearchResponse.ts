@@ -1,5 +1,12 @@
-export interface SearchResponse<Type> {
-    total: number,
-    documents: Type[],
-    page?: number 
+import type { SearchDocumentValue } from '.';
+
+export interface Document<Type> {
+	id: string;
+	value: Type;
+}
+
+export interface SearchResponse<Type extends SearchDocumentValue> {
+	total: number;
+	documents: Document<Type>[];
+	page: number;
 }

@@ -4,6 +4,7 @@ import { AUTH_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '$env/static
 import { sequence } from '@sveltejs/kit/hooks';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { protected_routes } from '$lib/constants';
+import type { Provider } from '@auth/core/providers';
 
 const authorization: Handle = async ({ event, resolve }) => {
 	if (protected_routes.includes(event.url.pathname)) {
@@ -27,7 +28,7 @@ export const handle: Handle = sequence(
 						response_type: 'code'
 					}
 				}
-			})
+			}) as Provider
 		],
 		secret: AUTH_SECRET
 	}),

@@ -1,4 +1,5 @@
 _learn
+    what a boolean looks like in a stored redis json value and how to filter by it in ft.search
     find out why ```
         export class EscapedEmail {
             value: string;
@@ -11,7 +12,6 @@ _learn
 
         const path = `$.users.${email}`
     ``` works
-    typescript - combine two types
     get the keys of a typescript interface into an Array?
     how typescript extends works
     what a boolean looks like in a stored redis json value and how to filter by it in ft.search
@@ -24,19 +24,16 @@ _learn
     goto previous page in component
     javascript disabled
 todo
-    verify payment pastack
+    look. at. paid
+    replies
+    copy replies as replied
     notify function
     specific type for PostId
-    check
-        what a boolean looks like in a stored redis json value and how to filter by it in ft.search
     tests
         reply
     postentry requires payment indicator
-    pay for post page
-    pay with paystack
-    markdown
-    reply
-    creator in PostEntry return from search
+    markdown admonition styles
+    creator in PostSearchDocument return from search
     vite-pwa
     PaystackPop window type
     auth page
@@ -49,7 +46,6 @@ todo
         return false from allowed() if not member
     article type
         article
-        group
     rename creator to 'creator' in all previous entries
     pay with paypal
     Search component 

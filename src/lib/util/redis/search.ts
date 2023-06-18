@@ -1,29 +1,22 @@
 import { embedding_field_name, items_per_page } from '$lib/constants';
 import type { SearchOptions } from 'redis';
-import { client, float32Buffer } from '.';
-import type { Filter } from '$lib/types/filter';
-import { NumberRange, SingleNumber, Tag, Text } from '$lib/types/filter';
-import type { SearchResponse } from '$lib/types/SearchResponse';
+import { client } from '.';
+import type { Filters } from '$lib/types/filter';
 import { embedding } from '$lib/util/embedding';
-import { slim } from '../shape/slim';
+import { slim } from '$lib/util/redis/shape/slim';
+import type { SearchDocumentValue } from '$lib/types';
+import { float32_buffer } from '$lib/util/float32_buffer';
 
 export interface SearchParams {
 	index: string;
-	page?: number;
-	filters?: Filter[];
+	page: number | null;
+	filters?: Filters;
 	count?: boolean;
 	RETURN: string[];
 	search?: string | number[];
 }
 
-export const search = async <T>({
-	index,
-	page,
-	// filters,
-	count,
-	search,
-	RETURN
-}: SearchParams): Promise<SearchResponse<T>> => {
+export const search = async ({ index, page, filters, count, search, RETURN }: SearchParams) => {
 	const options: SearchOptions = {
 		RETURN,
 		DIALECT: 3
@@ -38,38 +31,36 @@ export const search = async <T>({
 	let query = '*';
 	let extra_args = ''; // ' HYBRID_POLICY ADHOC_BF';
 
-	// if (filters && filters.length) {
-	// 	// filters.forEach((filter) => {
-	// 	// 	switch (filter.constructor) {
-	// 	// 		case Tag:
-	// 	// 			query += ` @${filter.field}:{${(<Tag>filter).values.map(
-	// 	// 				(v, i) => `${v}${i === v.length - 1 ? '' : ' |'}`
-	// 	// 			)}}"`;
-	// 	// 			break;
-	// 	// 		case SingleNumber:
-	// 	// 			query += ` @${filter.field}:[${(<SingleNumber>filter).value} ${
-	// 	// 				(<SingleNumber>filter).value
-	// 	// 			}]`;
-	// 	// 			break;
-	// 	// 		case NumberRange:
-	// 	// 			query += ` @${filter.field}:[${(<NumberRange>filter).start} ${
-	// 	// 				(<NumberRange>filter).end
-	// 	// 			}]`;
-	// 	// 			break;
-	// 	// 		case Text:
-	// 	// 			query += ` @${(<Text>filter).field}:(${(<Text>filter).value})`;
-	// 	// 	}
-	// 	// });
-	// 	extra_args = ' HYBRID_POLICY ADHOC_BF';
-	// } else {
-	// 	query = '*';
-	// }
+	if (filters && filters.length) {
+		filters.forEach((filter) => {
+			switch (filter.type) {
+				case 'tag':
+					query += ` @${filter.field}:{${filter.values.map(
+						(v, i) => `${v}${i === v.length - 1 ? '' : ' |'}`
+					)}}"`;
+					break;
+				case 'num':
+					query += ` @${filter.field}:[${filter.value} ${filter.value}]`;
+					break;
+				case 'range':
+					query += ` @${filter.field}:[${filter.start} ${filter.end}]`;
+					break;
+				case 'text':
+					query += ` @${filter.field}:(${filter.value})`;
+			}
+		});
+		extra_args = ' HYBRID_POLICY ADHOC_BF';
+	} else {
+		query = '*';
+	}
 
 	if (search) {
 		query += `=>[KNN 7 @${embedding_field_name} $BLOB${extra_args}]`; //TODO set ADHOC_BF only if filters
 		options.PARAMS = {
 			BLOB:
-				typeof search === 'string' ? float32Buffer(await embedding(search)) : float32Buffer(search)
+				typeof search === 'string'
+					? float32_buffer(await embedding(search))
+					: float32_buffer(search)
 		};
 		options.SORTBY = {
 			BY: `__${embedding_field_name}_score`,
@@ -84,9 +75,8 @@ export const search = async <T>({
 
 	const res = await client.ft.search(index, query, options);
 	res.documents = res.documents.map((r) => {
-		r.value = slim(r.value, true);
-		console.log('rrv', r.value)
+		r.value = slim(r.value, true) as SearchDocumentValue;
 		return r;
 	});
-	return res;
+	return { ...res, page };
 };

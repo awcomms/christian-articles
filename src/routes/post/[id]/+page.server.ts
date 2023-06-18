@@ -10,7 +10,6 @@ import { exists } from '$lib/util/redis';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const session = await locals.getSession();
-	// const current_version_id = await get_current_version_id(params.id).catch((e) => console.log('ce', e));
 	if (!(await exists(params.id))) throw error(401, '${params.id} not found');
 	const post = await get<Post>(params.id, [
 		'$.name',
@@ -27,20 +26,22 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		if (!session || !session.user?.email) {
 			throw redirect(302, `pay`);
 		}
-		if (!allowed_to_view(session.user?.email, params.id)) {
+		if (!allowed_to_view(new EscapedEmail(session.user.email), params.id)) {
 			throw redirect(302, `pay`);
 		}
 	}
 	return {
-		id: params.id,
-		post,
-		is_user: session?.user?.email
-			? await is_user(params.id, new EscapedEmail(session.user.email))
-			: false,
-		should_pay: (await requires_payment(params.id))
-			? session?.user?.email
-				? paid(session.user.email, params.id)
-				: false
-			: true
+		props: {
+			id: params.id,
+			post,
+			is_user: session?.user?.email
+				? await is_user(params.id, new EscapedEmail(session.user.email))
+				: false,
+			should_pay: (await requires_payment(params.id))
+				? session?.user?.email
+					? await paid(session.user.email, params.id)
+					: false
+				: true
+		}
 	};
 };

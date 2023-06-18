@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { RedisKey, PostEntry as _PostEntry } from '$lib/types';
+	import type { RedisKey, PostSearchDocument } from '$lib/types';
 	import PostEntry from './PostEntry.svelte';
-	export let posts: _PostEntry[],
+	export let posts: PostSearchDocument[],
 		select = false,
 		selected: RedisKey[] = [];
 

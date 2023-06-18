@@ -1,15 +1,21 @@
 <script lang="ts">
-	import type { PostEntry, RedisKey } from '$lib/types';
-	import { Modal, Button, Link } from 'carbon-components-svelte';
-	import View from 'carbon-icons-svelte/lib/View.svelte';
-	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
-	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
-	import Post from './Post.svelte';
-	import { page } from '$app/stores';
+	import type {
+		PostSearchDocument
+		// RedisKey
+	} from '$lib/types';
+	import {
+		//  Modal, Button,
+		Link
+	} from 'carbon-components-svelte';
+	// import View from 'carbon-icons-svelte/lib/View.svelte';
+	// import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
+	// import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
+	// import Post from './Post.svelte';
+	// import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
-	import { client_delete } from '$lib/util/client_del';
+	// import { client_delete } from '$lib/util/client_del';
 
-	export let post: PostEntry,
+	export let post: PostSearchDocument,
 		select = false,
 		selected = false;
 	// let open = false;
@@ -62,6 +68,7 @@
 	.post 
 		display: flex
 		align-items: center
+		padding: layout.$spacing-04
 	.select-control
 		width: layout.$spacing-04
 		height: layout.$spacing-04

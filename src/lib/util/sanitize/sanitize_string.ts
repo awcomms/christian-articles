@@ -7,7 +7,7 @@ export const sanitize_string = (text: string): string => {
 	if (browser) {
 		return dompurify.sanitize(text);
 	} else {
-		sanitize(text);
+		return sanitize(text);
 		// return DOMPurify(new JSDOM('').window).sanitize(text);
 	}
 };

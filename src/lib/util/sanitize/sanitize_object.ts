@@ -1,4 +1,4 @@
-import { is_object } from '../is_object';
+import { is_object } from '$lib/util/is_object';
 import { sanitize } from 'isomorphic-dompurify';
 import type { KeyedObject } from '$lib/types';
 
