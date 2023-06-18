@@ -8,7 +8,6 @@ import type { PostEdit } from '$lib/types/Post';
 import { error } from '@sveltejs/kit';
 import { posts_index_name } from '$lib/constants';
 import { create } from '$lib/util/redis/create';
-import { escape_email } from '$lib/util/escape_email';
 import { EscapedEmail } from '$lib/types';
 
 export const PUT: RequestHandler = async ({ request, locals, params }) => {

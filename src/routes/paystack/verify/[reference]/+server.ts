@@ -3,6 +3,7 @@ import { error, text } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { record_payment, type Args } from '$lib/util/redis/post/record_payment';
 import type { VerificationResponse } from '$lib/util/paystack/types';
+import { EscapedEmail } from '$lib/types';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { data } = await paystack
@@ -16,7 +17,7 @@ export const GET: RequestHandler = async ({ params }) => {
 			await record_payment({
 				...data.data.metadata,
 				cost: data.data.amount,
-				email: data.data.customer.email,
+				email: new EscapedEmail(data.data.customer.email),
 				date: new Date(data.data.paid_at).valueOf()
 			});
 			return text('1');

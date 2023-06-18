@@ -39,7 +39,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 				: false,
 			should_pay: (await requires_payment(params.id))
 				? session?.user?.email
-					? await paid(session.user.email, params.id)
+					? await paid(new EscapedEmail(session.user.email), params.id)
 					: false
 				: true
 		}

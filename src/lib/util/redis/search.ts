@@ -28,9 +28,10 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 			: { from: page > 1 ? (page - 1) * items_per_page : 0, size: items_per_page };
 	}
 
-	let query = '*';
+	let query = '';
 	let extra_args = ''; // ' HYBRID_POLICY ADHOC_BF';
 
+	console.log('filters', filters)
 	if (filters && filters.length) {
 		filters.forEach((filter) => {
 			switch (filter.type) {

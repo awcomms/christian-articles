@@ -1,7 +1,3 @@
-// declare module 'marked-bidi' {
-// 	export default (): marked.MarkedExtension
-// }
-
 import { marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import katex from 'marked-katex-extension';

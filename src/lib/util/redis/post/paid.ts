@@ -1,5 +1,5 @@
 import { get } from '$lib/util/redis/get';
-import type { RedisKey, Email, UserPayment, Payment } from '$lib/types';
+import type { RedisKey, UserPayment, Payment, EscapedEmail } from '$lib/types';
 
 interface GetRes {
 	payment: PaymentRes;
@@ -13,14 +13,14 @@ interface Users {
 	[email: string]: UserPayment;
 }
 
-export const paid = async (email: Email, id: RedisKey): Promise<boolean> => {
+export const paid = async (email: EscapedEmail, id: RedisKey): Promise<boolean> => {
 	const { payment } = await get<GetRes>(
 		id,
-		[`$.payment.users.${email}`, `$.payment.once`, `$.payment.duration`],
+		[`$.payment.users.${email.value}`, `$.payment.once`, `$.payment.duration`],
 		false
 	);
-	if (!payment || !payment.users || !payment?.users[email]) return false
-	const { date, paid_for_once } = payment.users[email];
+	if (!payment || !payment.users || !payment?.users[email.value]) return false
+	const { date, paid_for_once } = payment.users[email.value];
 	if (!date) return false;
 	if (paid_for_once && payment.once) {
 		return true;

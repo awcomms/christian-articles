@@ -11,8 +11,9 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	if (!session?.user?.email) throw error(401, 'not_logged_in');
 	const data = await request.json();
 	data.creator = escape_email(session.user.email);
+	data.current_version = true;
 	const id = await create({ index: posts_index_name, data });
-	console.log(data)
+	console.log(data);
 	await add(id, data.creator);
 	return text(id);
 };

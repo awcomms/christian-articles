@@ -24,10 +24,10 @@ _learn
     goto previous page in component
     javascript disabled
 todo
-    look. at. paid
     replies
     copy replies as replied
     notify function
+    migrate
     specific type for PostId
     tests
         reply

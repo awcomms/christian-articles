@@ -6,13 +6,14 @@ export const shape = (obj: KeyedObject, parse_first = false): KeyedObject => {
 		const keys = key.split('.');
 		keys.shift();
 		keys.reduce((ao, sub_key, index) => {
-			console.log(ao, sub_key, index);
 			if (index === keys.length - 1) {
 				let v: RedisJSON = obj[key];
 				if (parse_first && typeof v === 'string') {
 					try {
 						v = JSON.parse(v);
-					} catch {}
+					} catch {
+						('');
+					}
 				}
 				if (Array.isArray(v)) {
 					ao[sub_key] = v[0];
@@ -24,7 +25,7 @@ export const shape = (obj: KeyedObject, parse_first = false): KeyedObject => {
 					ao[sub_key] = {};
 				}
 			}
-			return ao[sub_key];
+			return ao[sub_key] as KeyedObject;
 		}, acc);
 		return acc;
 	}, {});
