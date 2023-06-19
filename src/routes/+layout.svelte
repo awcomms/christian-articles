@@ -7,6 +7,7 @@
 	import { dev } from '$app/environment';
 	import { inject } from '@vercel/analytics';
 	import { theme, theme_key } from '$lib/theme_store';
+	import Notifications from '$lib/components/Notifications.svelte';
 
 	inject({ mode: dev ? 'development' : 'production' });
 
@@ -22,6 +23,7 @@
 	});
 </script>
 
+<Notifications />
 <Theme persist persistKey={theme_key} theme={$theme} />
 <Header />
 <Content style="background: none; padding: 4rem 1rem 0 1rem; height: 100%">

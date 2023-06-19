@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params }) => {
 	const res = await search({
 		page: 0,
-		filters: [{ type: 'text', field: 'creator', value: escape_email(params.email)}]
+		filters: [{ type: 'text', field: 'creator', value: escape_email(params.email) }]
 	});
 	return {
 		user: params.email,

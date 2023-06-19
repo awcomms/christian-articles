@@ -9,7 +9,8 @@
 	import Share from 'carbon-icons-svelte/lib/Share.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 	import ConfirmDelete from './ConfirmDelete.svelte';
-	import { del } from '$lib/util/redis/del';
+	import axios from 'axios';
+	import { notify } from '$lib/util/notify';
 
 	export let id: RedisKey, post: Post, is_user: boolean, navigate_on_delete: boolean;
 	let delete_open = false,
@@ -20,9 +21,14 @@
 
 <ConfirmDelete
 	on:accept={() =>
-		del(id).then(() => {
-			if (navigate_on_delete) goto('/'); /**TODO goto previous page*/
-		})}
+		axios
+			.delete(`post/${id}`)
+			.then(() => {
+				if (navigate_on_delete) goto('/'); /**TODO goto previous page*/
+			})
+			.catch((e) =>
+				notify({ title: `Encountered an error attempting to delete item: ${id}`, subtitle: e })
+			)}
 	{id}
 	name={post.name}
 	bind:open={delete_open}

@@ -33,9 +33,7 @@
 				notify('Edit saved');
 			})
 			.catch((e) => {
-				const error = e.response.data;
-				console.log('e', error);
-				notify(`An error occured: ${error}`);
+				notify({ title: `An error occured`, subtitle: e.reponse.data });
 			})
 			.finally(() => (save_loading = false));
 	};

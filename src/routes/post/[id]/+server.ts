@@ -17,18 +17,30 @@ export const PUT: RequestHandler = async ({ request, locals, params }) => {
 		throw error(401, 'You are not logged in');
 	}
 	const { id } = params;
-	if (!(await exists(id))) {
+	if (
+		!(await exists(id).catch((e) => {
+			throw error(500, e);
+		}))
+	) {
 		throw error(404, `Item with id ${id} does not exist`);
 	}
-	const root_id = await get_root_id(id);
+	const root_id = await get_root_id(id).catch((e) => {
+		throw error(500, e);
+	});
 	if (!root_id) {
 		throw error(404, `Encountered an error getting the root post of post ${id}. It was not found`);
 	}
 	const { data } = await request.json();
-	if (!(await is_user(id, new EscapedEmail(session.user.email)))) {
+	if (
+		!(await is_user(id, new EscapedEmail(session.user.email)).catch((e) => {
+			throw error(500, e);
+		}))
+	) {
 		throw error(401, unauthorized_user_error(session.user.email));
 	}
-	await update({ id: root_id, data: { ...data, updated: Date.now() } });
+	await update({ id: root_id, data }).catch((e) => {
+		throw error(500, e);
+	});
 	const edit_create_data: PostEdit = {
 		edit: { to: root_id, current: true },
 		name: data.name,
@@ -41,6 +53,8 @@ export const PUT: RequestHandler = async ({ request, locals, params }) => {
 	await create({
 		index: posts_index_name,
 		data: edit_create_data
+	}).catch((e) => {
+		throw error(500, e);
 	});
 	return new Response('done', { status: 200 });
 };

@@ -31,7 +31,9 @@
 		await axios
 			.post('/post/search', { search, page, filters })
 			.then((r) => ({ total: totalItems, documents: posts } = r.data))
-			.catch(() => notify('Error encountered getting results'))
+			.catch((e) => {
+				notify({ title: `An error occured`, subtitle: e });
+			})
 			.finally(() => (loading = false));
 	};
 </script>
@@ -59,10 +61,8 @@
 	/>
 {:else}
 	<div class="cta">
-		<Button kind="ghost" size="xl" on:click={() => search_input_ref.focus()}
-			>{searched
-				? 'It appears there are no results for your search, try a different search'
-				: 'Search for an article'}</Button
+		<Button kind="ghost" size="xl" on:click={() => search_input_ref.focus()}>
+			Search for an article</Button
 		>
 	</div>
 {/if}

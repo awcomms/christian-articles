@@ -22,7 +22,7 @@ export const update = async ({ id, data }: { id: string; data: KeyedObject }) =>
 	};
 	include('$', data as KeyedObject, values);
 	for (const [path, value] of Object.entries(values)) {
-		console.log(id, path, value);
 		await client.json.set(id, path, value);
 	}
+	await client.json.set(id, '$.updated', Date.now());
 };

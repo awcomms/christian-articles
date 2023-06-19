@@ -1,6 +1,6 @@
 import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from '$env/static/private';
-import {  createClient } from 'redis';
 import { setup } from './setup';
+import {  createClient } from 'redis';
 
 export const client = createClient({
 	password: REDIS_PASSWORD,

@@ -5,13 +5,14 @@
 
 </script>
 
-<div class="all" style="z-index: {level};">
+<div class="all" style="z-index: {7777777 + level};">
     <ToastNotification on:close {...props} />
 </div>
 
 <style lang="sass">
+    @use '@carbon/layout'
     .all
         position: absolute
-        top: 4px
-        right: 4px
+        top: layout.$spacing-09
+        right: layout.$spacing-02
 </style>

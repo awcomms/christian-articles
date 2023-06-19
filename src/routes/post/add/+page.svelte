@@ -16,13 +16,14 @@
 		}
 		loading = true;
 		await axios
-			.post('/post', {
-				...e.detail
-			})
+			.post('/post', e.detail)
 			.then(async (r) => {
 				goto(`/post/${r.data}`);
 			})
-			.catch((e) => notify(`Error encountered ${e}`))
+			.catch((e) => {
+				console.log(e)
+				notify({ title: `An error occured`, subtitle: e });
+			})
 			.finally(() => (loading = false));
 	};
 </script>

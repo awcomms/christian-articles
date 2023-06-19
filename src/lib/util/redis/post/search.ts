@@ -15,11 +15,11 @@ export const search = ({
 	filters: _filters,
 	count,
 	search
-}: // reference
+}: // reference TODO?
 ExtraPostSearchParams) => {
-	const RETURN = ['$.name', '$.body', '$.id', '$.creator'];
+	const RETURN = ['$.name', '$.body', '$.id', '$.creator', '$.is_root'];
 	const filters = _filters ? _filters : [];
-	filters.push({ type: 'text', field: 'current_version', value: 'true' });
+	filters.push({ type: 'bool', field: 'is_root', value: true });
 	// if (reference) {
 	// 	RETURN.push(`$.replies.${reference} AS in_replies`);
 	// 	RETURN.push(`$.replied.${reference} AS in_replied`);

@@ -22,16 +22,15 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 		DIALECT: 3
 	};
 
-	if (page) {
-		options.LIMIT = count
-			? { from: 0, size: 0 }
-			: { from: page > 1 ? (page - 1) * items_per_page : 0, size: items_per_page };
-	}
+	// if (page) {
+	// 	options.LIMIT = count
+	// 		? { from: 0, size: 0 }
+	// 		: { from: page > 1 ? (page - 1) * items_per_page : 0, size: items_per_page };
+	// }
 
 	let query = '';
 	let extra_args = ''; // ' HYBRID_POLICY ADHOC_BF';
 
-	console.log('filters', filters)
 	if (filters && filters.length) {
 		filters.forEach((filter) => {
 			switch (filter.type) {
@@ -41,10 +40,10 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 					)}}"`;
 					break;
 				case 'num':
-					query += ` @${filter.field}:[${filter.value} ${filter.value}]`;
-					break;
-				case 'range':
 					query += ` @${filter.field}:[${filter.start} ${filter.end}]`;
+					break;
+				case 'bool':
+					query += ` @${filter.field}:{${filter.value.toString()}}`;
 					break;
 				case 'text':
 					query += ` @${filter.field}:(${filter.value})`;
@@ -74,10 +73,12 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 		};
 	}
 
-	const res = await client.ft.search(index, query, options);
-	res.documents = res.documents.map((r) => {
-		r.value = slim(r.value, true) as SearchDocumentValue;
-		return r;
+	return client.ft.search(index, query, options).then((res) => {
+		res.documents = res.documents.map((r) => {
+			r.value = slim(r.value, true) as SearchDocumentValue;
+			return r;
+		});
+		console.log('search res', res.documents.map(r => r.value))
+		return { ...res, page };
 	});
-	return { ...res, page };
 };

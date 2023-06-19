@@ -1,5 +1,5 @@
 _learn
-    what a boolean looks like in a stored redis json value and how to filter by it in ft.search
+    type sveltekit endpoint args
     find out why ```
         export class EscapedEmail {
             value: string;
@@ -24,6 +24,9 @@ _learn
     goto previous page in component
     javascript disabled
 todo
+    show search results count and if none found
+    tests
+        replies
     replies
     copy replies as replied
     notify function

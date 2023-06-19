@@ -8,5 +8,6 @@ export const embedding = (input: string) =>
 			return r.data.data[0].embedding;
 		})
 		.catch((e) => {
-			throw new Error(`createEmbedding error, ${e}`);
+			const error = e.response.status === 429 ? "We experienced a rate limit error. Please try again in a few moments" : e.response.data
+			throw new Error(`createEmbedding error, ${error}`);
 		});
