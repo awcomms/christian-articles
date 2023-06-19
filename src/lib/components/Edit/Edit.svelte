@@ -8,6 +8,7 @@
 	};
 	export let save_loading = false,
 		delete_loading = false,
+		show_delete_button = false,
 		id: string | undefined = undefined,
 		post: EditablePost = {
 			name: '',
@@ -134,7 +135,7 @@
 			icon={save_loading ? InlineLoading : Save}
 			on:click={dispatch_accept}>Save</Button
 		>
-		{#if id}
+		{#if show_delete_button && id}
 			<Button
 				disabled={loading}
 				icon={delete_loading ? InlineLoading : TrashCan}

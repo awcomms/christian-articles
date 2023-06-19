@@ -8,3 +8,4 @@ export const embedding_field_name = 'v';
 export const ids_hash = 'ids';
 export const content_attributes = ['name', 'body'];
 export const editable_attributes = ['name', 'body', 'payment', 'allow_replies'];
+

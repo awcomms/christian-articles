@@ -5,8 +5,10 @@
 	import { notify } from '$lib/util/notify';
 	import { goto } from '$app/navigation';
 	import { client_delete } from '$lib/util/client_del';
+	import ConfirmDelete from '$lib/components/ConfirmDelete.svelte';
 
-	export let data: PageData;
+	export let data: PageData,
+		delete_open = false;
 
 	let save_loading = false,
 		delete_loading = false;
@@ -39,11 +41,14 @@
 	};
 </script>
 
+<ConfirmDelete id={data.id} name={data.post.name} bind:open={delete_open} on:accept={del} />
+
 <Edit
+	show_delete_button
 	id={data.id}
 	{save_loading}
 	{delete_loading}
-	on:delete={del}
+	on:delete={() => (delete_open = true)}
 	on:accept={edit}
 	post={data.post}
 />

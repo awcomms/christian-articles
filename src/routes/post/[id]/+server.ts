@@ -9,30 +9,25 @@ import { error } from '@sveltejs/kit';
 import { posts_index_name } from '$lib/constants';
 import { create } from '$lib/util/redis/create';
 import { EscapedEmail } from '$lib/types';
+import { unauthorized_user_error } from '$lib/util/errors/unauthorized_user_error';
 
 export const PUT: RequestHandler = async ({ request, locals, params }) => {
 	const session = await locals.getSession();
 	if (!session?.user?.email) {
-		throw error(401, 'No logged in user');
-	} //TODO}
+		throw error(401, 'You are not logged in');
+	}
 	const { id } = params;
 	if (!(await exists(id))) {
 		throw error(404, `Item with id ${id} does not exist`);
 	}
 	const root_id = await get_root_id(id);
 	if (!root_id) {
-		throw error(404, `Root post ${id} not found`);
+		throw error(404, `Encountered an error getting the root post of post ${id}. It was not found`);
 	}
 	const { data } = await request.json();
-	delete data.id;
-	delete data.created; //TOD-ummm
 	if (!(await is_user(id, new EscapedEmail(session.user.email)))) {
-		throw error(
-			401,
-			`Logged in user is not authorised
-		 to perform this action`
-		);
-	} //TODO
+		throw error(401, unauthorized_user_error(session.user.email));
+	}
 	await update({ id: root_id, data: { ...data, updated: Date.now() } });
 	const edit_create_data: PostEdit = {
 		edit: { to: root_id, current: true },
@@ -50,8 +45,12 @@ export const PUT: RequestHandler = async ({ request, locals, params }) => {
 	return new Response('done', { status: 200 });
 };
 
-export const DELETE: RequestHandler = async ({ params }) => {
+export const DELETE: RequestHandler = async ({ params, locals }) => {
+	const session = await locals.getSession();
+	if (!session?.user?.email) throw error(401, 'You are not logged in');
 	const { id } = params;
+	if (!(await is_user(id, new EscapedEmail(session.user.email))))
+		throw error(401, unauthorized_user_error(session.user.email));
 	await del(id);
 	return new Response(null, { status: 204 });
 };

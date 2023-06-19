@@ -56,7 +56,7 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 	}
 
 	if (search) {
-		query += `=>[KNN 7 @${embedding_field_name} $BLOB${extra_args}]`; //TODO set ADHOC_BF only if filters
+		query += `=>[KNN 7 @${embedding_field_name} $BLOB${extra_args}]`;
 		options.PARAMS = {
 			BLOB:
 				typeof search === 'string'

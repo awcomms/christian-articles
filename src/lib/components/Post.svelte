@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let id: string, post: Post, should_pay: boolean, is_user: boolean;
 
-	import { Button, ButtonSet, Tab, TabContent, Tabs } from 'carbon-components-svelte';
+	import { Button, ButtonSet } from 'carbon-components-svelte';
 	import PostView from './PostView.svelte';
 	import type { Post } from '$lib/types';
 
@@ -28,4 +28,4 @@
 	<Button href="/post/{id}/similar">Similar posts</Button>
 </ButtonSet>
 
-<PostView {is_user} {id} {post} />
+<PostView navigate_on_delete={true} {is_user} {id} {post} />

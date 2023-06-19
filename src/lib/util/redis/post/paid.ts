@@ -19,7 +19,7 @@ export const paid = async (email: EscapedEmail, id: RedisKey): Promise<boolean> 
 		[`$.payment.users.${email.value}`, `$.payment.once`, `$.payment.duration`],
 		false
 	);
-	if (!payment || !payment.users || !payment?.users[email.value]) return false
+	if (!payment || !payment.users || !payment.users[email.value]) return false
 	const { date, paid_for_once } = payment.users[email.value];
 	if (!date) return false;
 	if (paid_for_once && payment.once) {

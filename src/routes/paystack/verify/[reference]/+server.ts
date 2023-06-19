@@ -26,6 +26,6 @@ export const GET: RequestHandler = async ({ params }) => {
 		}
 	} else {
 		console.log('paystack payment verification status: false', data);
-		throw error(500, 'The response from our payment provider was not successful'); //TODO
+		throw error(500, 'Payment verification failed'); //TODO
 	}
 };

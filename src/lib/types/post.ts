@@ -7,12 +7,10 @@ export interface Payment {
 	once: boolean;
 	cost: number;
 	self: boolean;
-	expires?: number | 'never';
 	// users?: {[index:string]: UserPayment}
 }
 
 export interface UserPayment {
-	// [index: string]: number | boolean,
 	date: number;
 	cost: number;
 	once: boolean;
@@ -21,17 +19,17 @@ export interface UserPayment {
 
 export type PostEdit = Omit<EditablePost, 'payment' | 'allow_replies'> & Pick<Post, 'edit'>; //TODO-more precise on edit
 
-export type EditablePost = Omit<Post, 'id' | 'creator' | 'created' | 'updated' | 'edit'>;
+export type EditablePost = Omit<Post, 'id' | 'creator' | 'created' | 'updated'>;
 
 export interface Post {
 	id: RedisKey;
 	creator: string;
-	html?: string;
 	created: Date;
 	updated: Date;
+	html?: string;
 	edit?: Edit;
 	allow_replies: boolean;
-	payment?: Payment;
+	payment: Payment;
 	alias: string;
 	alias_plural: string;
 	replies_description: string;

@@ -1,26 +1,32 @@
 <script lang="ts">
 	import type { Post, RedisKey } from '$lib/types';
-	import {
-		Button,
-		CopyButton,
-		InlineLoading,
-		InlineNotification,
-		Link
-	} from 'carbon-components-svelte';
+	import { Button, CopyButton, InlineLoading } from 'carbon-components-svelte';
 	import CuteButton from './CuteButton.svelte';
 	import { page } from '$app/stores';
-	import { client_delete } from '$lib/util/client_del';
 	import { goto } from '$app/navigation';
 	import CopyLinkButton from './CopyLinkButton.svelte';
 	import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	import Share from 'carbon-icons-svelte/lib/Share.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
-	import { parse } from '$lib/util/markdown/parse/web';
+	import ConfirmDelete from './ConfirmDelete.svelte';
+	import { del } from '$lib/util/redis/del';
 
-	export let id: RedisKey, post: Post, is_user: boolean;
+	export let id: RedisKey, post: Post, is_user: boolean, navigate_on_delete: boolean;
+	let delete_open = false,
+		delete_loading = false;
 
 	console.log(post);
 </script>
+
+<ConfirmDelete
+	on:accept={() =>
+		del(id).then(() => {
+			if (navigate_on_delete) goto('/'); /**TODO goto previous page*/
+		})}
+	{id}
+	name={post.name}
+	bind:open={delete_open}
+/>
 
 <div class="article">
 	<div class="title">
@@ -33,10 +39,10 @@
 			/>
 			<CuteButton
 				onclick={async () => {
-					await client_delete(id).then((r) => goto('/') /**TODO goto user's posts*/);
+					delete_open = true;
 				}}
 				iconDescription="Delete this post"
-				icon={TrashCan}
+				icon={delete_loading ? InlineLoading : TrashCan}
 			/>
 		{/if}
 		<CopyButton

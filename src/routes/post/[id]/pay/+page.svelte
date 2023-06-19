@@ -33,7 +33,7 @@
 				const url = data.self ? `/post/${data.id}` : `/post/${data.id}/replies`;
 				goto(url);
 			} else {
-				notify('Payment Verification returned false'); //TODO
+				notify('Payment unverified'); //TODO
 			}
 		}}
 		on:error={({ detail }) => notify(detail)}
