@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
-import { sanitize } from 'isomorphic-dompurify';
+import pkg from 'isomorphic-dompurify';
+const { sanitize } = pkg;
 import dompurify from 'dompurify';
 // import { JSDOM } from 'jsdom';
 

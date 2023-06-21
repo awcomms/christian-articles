@@ -1,5 +1,6 @@
 import { is_object } from '$lib/util/is_object';
-import { sanitize } from 'isomorphic-dompurify';
+import pkg from 'isomorphic-dompurify';
+const { sanitize } = pkg;
 
 export const sanitize_object = (object: { [index: string]: unknown }) => {
 	for (const [key, value] of Object.entries(object)) {
