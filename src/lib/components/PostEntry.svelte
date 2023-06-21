@@ -4,9 +4,12 @@
 		// RedisKey
 	} from '$lib/types';
 	import {
+	Button,
 		//  Button,
 		Link
 	} from 'carbon-components-svelte';
+	import Checkbox from 'carbon-icons-svelte/lib/Checkbox.svelte';
+	import CheckboxChecked from 'carbon-icons-svelte/lib/CheckboxChecked.svelte';
 	// import TrashCan from 'carbon-icons-svelte/lib/TrashCan.svelte';
 	// import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 	// import { page } from '$app/stores';
@@ -22,11 +25,9 @@
 
 <div on:click on:keydown={() => dispatch('click')} class="post">
 	{#if select}
-		<div
-			on:click={() => dispatch('select-click')}
-			on:keydown={() => dispatch('select-click')}
-			class="select-control"
-			class:selected
+		<Button
+			icon={selected ? CheckboxChecked : Checkbox}
+			on:click={() => dispatch('select-click', post.id)}
 		/>
 	{/if}
 	<div class="name">
@@ -56,10 +57,4 @@
 		display: flex
 		align-items: center
 		padding: layout.$spacing-04
-	.select-control
-		width: layout.$spacing-04
-		height: layout.$spacing-04
-		border: 50% solid black
-	.selected
-		background-color: black
 </style>

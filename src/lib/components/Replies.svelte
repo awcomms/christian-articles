@@ -25,7 +25,17 @@
 
 	const new_reply = (post: Post) => {
 		axios.post('/post', post).then((r) => {
-			axios.post(`post/${r.data}/reply`, [id]);
+			axios.post(`/post/${r.data}/reply`, [id]).then(async (r) => {
+				posts = [
+					{
+						id: r.data,
+						value: await axios.get(`post/${r.data}`, {
+							params: { paths: JSON.stringify(['$.name']) }
+						})
+					},
+					...posts
+				];
+			});
 		});
 	};
 </script>

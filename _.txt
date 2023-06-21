@@ -24,17 +24,17 @@ _learn
     goto previous page in component
     javascript disabled
 todo
+    allowed for children
     show search results count and if none found
     tests
-        replies
-    replies
-    copy replies as replied
-    notify function
-    migrate
-    specific type for PostId
-    tests
+        add
+        edit
+        search
         reply
-    postentry requires payment indicator
+        replies
+    copy replies as replied
+    notify function... with action?
+    migrate
     markdown admonition styles
     creator in PostSearchDocument return from search
     vite-pwa
@@ -49,8 +49,4 @@ todo
         return false from allowed() if not member
     article type
         article
-    rename creator to 'creator' in all previous entries
     pay with paypal
-    Search component 
-        filter
-            payment required only, payment not required only

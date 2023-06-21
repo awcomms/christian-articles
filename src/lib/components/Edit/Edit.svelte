@@ -4,7 +4,8 @@
 		cost: 0,
 		once: false,
 		duration: 1,
-		self: false
+		self: false,
+		edits: false
 	};
 	export let save_loading = false,
 		delete_loading = false,
@@ -53,7 +54,6 @@
 				dispatch('accept', sanitized);
 			})
 			.catch((e) => {
-				console.log(e);
 				error = e;
 			});
 	};
@@ -107,11 +107,16 @@
 			bind:toggled={post.payment.required}
 			labelText="Require users to be subscribed to this post to view it's sub-posts"
 		/>
+		
 	{/if}
 	{#if post.payment?.required}
 		<Toggle
 			bind:toggled={post.payment.self}
 			labelText="Require users to be subscribed to this post to view this post itself"
+		/>
+		<Toggle
+			bind:toggled={post.payment.edits}
+			labelText="Require users to be subscribed to this post to view it's past edits"
 		/>
 		<NumberInput
 			label="Cost for a user to subscribe to this article in Naira (NGN)"

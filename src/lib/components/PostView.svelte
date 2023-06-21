@@ -15,14 +15,12 @@
 	export let id: RedisKey, post: Post, is_user: boolean, navigate_on_delete: boolean;
 	let delete_open = false,
 		delete_loading = false;
-
-	console.log(post);
 </script>
 
 <ConfirmDelete
 	on:accept={() =>
 		axios
-			.delete(`post/${id}`)
+			.delete(`/post/${id}`)
 			.then(() => {
 				if (navigate_on_delete) goto('/'); /**TODO goto previous page*/
 			})

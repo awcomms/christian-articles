@@ -26,7 +26,7 @@
 {#if loading}
 	<Loading />
 {:else}
-	<Posts bind:selected {select} {posts} />
+	<Posts on:select-click on:select on:deselect bind:selected {select} {posts} />
 {/if}
 
 <Pagination

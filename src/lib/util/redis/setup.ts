@@ -29,6 +29,11 @@ export const setup = async () => {
 							type: SchemaFieldTypes.TAG,
 							SORTABLE: true
 						},
+						'$.requires_payment': {
+							AS: 'requires_payment',
+							type: SchemaFieldTypes.TAG,
+							SORTABLE: true
+						},
 						'$.replies': {
 							AS: 'replies.*',
 							type: SchemaFieldTypes.TAG,

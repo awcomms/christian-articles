@@ -7,6 +7,7 @@ export interface Payment {
 	once: boolean;
 	cost: number;
 	self: boolean;
+	edits: boolean;
 	// users?: {[index:string]: UserPayment}
 }
 
@@ -16,6 +17,8 @@ export interface UserPayment {
 	once: boolean;
 	paid_for_once: boolean;
 }
+
+export type NumberBool = 0 | 1
 
 export type PostEdit = Omit<EditablePost, 'payment' | 'allow_replies'> & Pick<Post, 'edit'>; //TODO-more precise on edit
 

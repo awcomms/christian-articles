@@ -3,7 +3,7 @@ import { embedding } from '$lib/util/embedding';
 import { ids_hash } from '$lib/constants';
 import { dev } from '$app/environment';
 
-const build_id = (index: string, id: number) => `${index}:${id}`;
+const build_id = (index: string, id: number) => `${index}_${id}`;
 
 export const add_embedding = async (data: object) => {
 	return { v: await embedding(JSON.stringify(data)), ...data };

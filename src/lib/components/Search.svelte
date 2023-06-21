@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TextInput, Button, Row, Loading } from 'carbon-components-svelte';
+	import { TextInput, Button, Row, Loading, Modal } from 'carbon-components-svelte';
 	import type { PostSearchDocument, RedisKey } from '$lib/types';
 	import PostsPagination from './PostsPagination.svelte';
 	import Search from 'carbon-icons-svelte/lib/Search.svelte';
@@ -7,10 +7,12 @@
 	import { notify } from '$lib/util/notify';
 	import OnEnter from './OnEnter.svelte';
 	import { onMount } from 'svelte';
-	import type { Filters } from '$lib/types/filter';
+	import type { Filters as _Filters } from '$lib/types/filter';
+	import Filters from './Filters.svelte';
 
 	export let select = false,
-		filters: Filters = [],
+		filters: _Filters = [],
+		show_filters = false,
 		selected: RedisKey[] = [];
 	let loading = false,
 		search: string,
@@ -40,6 +42,12 @@
 
 <OnEnter on:enter={() => get(page)} />
 
+{#if show_filters}
+	<Modal passiveModal>
+		<Filters />
+	</Modal>
+{/if}
+
 <Row>
 	<TextInput bind:ref={search_input_ref} bind:value={search} />
 	<Button size="field" on:click={() => get(page)} iconDescription="Search" icon={Search} />
@@ -49,6 +57,7 @@
 	<Loading />
 {:else if posts.length > 0}
 	<PostsPagination
+		on:select-click
 		bind:selected
 		{select}
 		{totalItems}
@@ -62,7 +71,7 @@
 {:else}
 	<div class="cta">
 		<Button kind="ghost" size="xl" on:click={() => search_input_ref.focus()}>
-			Search for an article</Button
+			{searched && !posts.length ? `There don't seem to be any results for your search` : 'Search for an article'}</Button
 		>
 	</div>
 {/if}

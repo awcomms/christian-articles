@@ -12,7 +12,7 @@ export interface SearchParams {
 	page: number | null;
 	filters?: Filters;
 	count?: boolean;
-	RETURN: string[];
+	RETURN?: string[];
 	search?: string | number[];
 }
 
@@ -31,13 +31,14 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 	let query = '';
 	let extra_args = ''; // ' HYBRID_POLICY ADHOC_BF';
 
+	console.log(filters)
 	if (filters && filters.length) {
 		filters.forEach((filter) => {
 			switch (filter.type) {
 				case 'tag':
 					query += ` @${filter.field}:{${filter.values.map(
-						(v, i) => `${v}${i === v.length - 1 ? '' : ' |'}`
-					)}}"`;
+						(v, i) => `${v}${i === filter.values.length - 1 ? '' : ' |'}`
+					)}}`;
 					break;
 				case 'num':
 					query += ` @${filter.field}:[${filter.start} ${filter.end}]`;
@@ -53,6 +54,8 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 	} else {
 		query = '*';
 	}
+
+	console.log(query)
 
 	if (search) {
 		query += `=>[KNN 7 @${embedding_field_name} $BLOB${extra_args}]`;
@@ -73,12 +76,12 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 		};
 	}
 
+	console.log(query);
 	return client.ft.search(index, query, options).then((res) => {
 		res.documents = res.documents.map((r) => {
 			r.value = slim(r.value, true) as SearchDocumentValue;
 			return r;
 		});
-		console.log('search res', res.documents.map(r => r.value))
 		return { ...res, page };
 	});
 };

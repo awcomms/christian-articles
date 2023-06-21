@@ -29,7 +29,6 @@
 		await axios
 			.put(`/post/${data.id}`, { id: data.id, data: { ...e.detail } })
 			.then((r) => {
-				console.log('tr', r.data);
 				notify('Edit saved');
 			})
 			.catch((e) => {

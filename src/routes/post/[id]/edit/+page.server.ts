@@ -20,7 +20,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	const root_id = await get_root_id(params.id);
 	if (!root_id) throw error(404, `Root of ${params.id} not found`);
 	const post = await get<Post>(root_id, editable_attributes.map(a => `$.${a}`), false);
-	console.log('ep', post)
 	return {
 		id: params.id,
 		post

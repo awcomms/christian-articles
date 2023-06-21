@@ -9,7 +9,6 @@ export const parse = (text: string, timeout_ms = parse_timeout): Promise<string>
 		});
 		worker.postMessage(text);
 		const timeout = setTimeout(() => {
-			console.log('timeout');
 			worker.terminate();
 			reject('timeout');
 		}, timeout_ms);

@@ -1,7 +1,11 @@
-export type Filter<Type extends 'tag' | 'text' | 'bool' | 'num'> = {
+export type Filter<Type extends types> = {
+	name?: string;
+	user_editable?: boolean,
 	field: string;
 	type: Type;
 };
+
+export type types = 'tag' | 'text' | 'bool' | 'num';
 
 export type Filters = Array<Tag | Text | Bool | Num>;
 

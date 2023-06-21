@@ -14,6 +14,7 @@
 <Modal
 	bind:open
 	primaryButtonText="Yes"
+	secondaryButtonText="Cancel"
 	primaryButtonIcon={TrashCan}
 	on:click:button--primary={() => dispatch('accept')}
 	modalHeading="Confirm deletion of {id}"

@@ -10,6 +10,25 @@ import { posts_index_name } from '$lib/constants';
 import { create } from '$lib/util/redis/create';
 import { EscapedEmail } from '$lib/types';
 import { unauthorized_user_error } from '$lib/util/errors/unauthorized_user_error';
+import { allowed } from '$lib/util/redis/post/allowed';
+import { requires_payment } from '$lib/util/redis/post/requires_payment';
+import { get } from '$lib/util/redis';
+
+export const GET: RequestHandler = async ({ params, url, locals }) => {
+	if (await requires_payment(params.id)) {
+		const session = await locals.getSession();
+		if (!session?.user?.email) throw error(402);
+		if (!allowed(new EscapedEmail(session.user.email), params.id)) throw error(402);
+	}
+	let paths = [];
+	try {
+		paths = JSON.parse(url.searchParams.get('paths') || '');
+	} catch {
+		throw error(400, 'search parameter `url` was not valid JSON');
+	}
+	if (!Array.isArray(paths)) throw error(400, 'search parameter `paths` was not a JSON array');
+	return get(params.id, paths)
+};
 
 export const PUT: RequestHandler = async ({ request, locals, params }) => {
 	const session = await locals.getSession();

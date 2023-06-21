@@ -1,7 +1,7 @@
 import { get } from '$lib/util/redis/get';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { allowed_to_view } from '$lib/util/redis/post/allowed/allowed_to_view';
+import { allowed } from '$lib/util/redis/post/allowed';
 import { exists } from '$lib/util/redis/exists';
 import { EscapedEmail } from '$lib/types';
 
@@ -28,6 +28,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!required) redirect_to_post(params.id);
 	const session = await locals.getSession();
 	if (!session?.user?.email) return {};
-	if (await allowed_to_view(new EscapedEmail(session.user.email), params.id)) redirect_to_post(params.id);
+	if (await allowed(new EscapedEmail(session.user.email), params.id)) redirect_to_post(params.id);
 	return { id: params.id, name, once, cost, self, duration, replies_description };
 };

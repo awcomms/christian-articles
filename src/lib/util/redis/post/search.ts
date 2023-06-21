@@ -3,7 +3,7 @@ import { search as _search } from '$lib/util/redis/search';
 import { posts_index_name } from '$lib/constants';
 import type { PostItem, RedisKey, SearchResponse } from '$lib/types';
 
-export type PostSearchParams = Omit<SearchParams, 'index' | 'RETURN'>;
+export type PostSearchParams = Omit<SearchParams, 'index' | 'page'> & Partial<Pick<SearchParams, 'page' | 'RETURN'>>;
 
 export interface ExtraPostSearchParams extends PostSearchParams {
 	email?: string;
@@ -11,13 +11,13 @@ export interface ExtraPostSearchParams extends PostSearchParams {
 }
 
 export const search = ({
-	page,
+	page = 1,
 	filters: _filters,
 	count,
-	search
+	search,
+	RETURN = ['$.name', '$.body', '$.id', '$.creator', '$.is_root']
 }: // reference TODO?
 ExtraPostSearchParams) => {
-	const RETURN = ['$.name', '$.body', '$.id', '$.creator', '$.is_root'];
 	const filters = _filters ? _filters : [];
 	filters.push({ type: 'bool', field: 'is_root', value: true });
 	// if (reference) {
