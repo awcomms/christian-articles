@@ -33,10 +33,10 @@
 				const url = data.self ? `/post/${data.id}` : `/post/${data.id}/replies`;
 				goto(url);
 			} else {
-				notify('Payment unverified'); //TODO
+				notify({title: `Payment for is unverified`, kind: 'warning'}); //TODO
 			}
 		}}
-		on:error={({ detail }) => notify(detail)}
+		on:error={({ detail }) => notify({title: `Encountered an error attempting to verify the payment`, subtitle: detail, kind:'error'})}
 		button_props={{}}>Click here to pay for access to this post</Paystack
 	>
 {:else}

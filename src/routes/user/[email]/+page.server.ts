@@ -3,9 +3,9 @@ import { search } from '$lib/util/redis/post/search';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
+	const filters = [{ type: 'text', field: 'creator', value: escape_email(params.email) }]
 	const res = await search({
-		page: 0,
-		filters: [{ type: 'text', field: 'creator', value: escape_email(params.email) }]
+		filters,
 	});
 	return {
 		user: params.email,

@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { page } from '$app/stores';
 	import type { Post, PostSearchDocument, RedisKey } from '$lib/types';
 	import { Button, ButtonSet, InlineLoading, Modal } from 'carbon-components-svelte';
@@ -25,7 +25,9 @@
 
 	const new_reply = (post: Post) => {
 		axios.post('/post', post).then((r) => {
+			console.log('new_reply post r and [id]', r, [id])
 			axios.post(`/post/${r.data}/reply`, [id]).then(async (r) => {
+			console.log('new_reply post r', r)
 				posts = [
 					{
 						id: r.data,
@@ -68,4 +70,4 @@
 	</ButtonSet>
 {/if}
 
-<Context {filters} {posts} {totalItems} />
+<Context {filters} {posts} {totalItems} /> -->

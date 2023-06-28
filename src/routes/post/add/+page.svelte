@@ -11,7 +11,7 @@
 	const add = async (e: CustomEvent) => {
 		if (!$page.data.session || !$page.data.session.user?.email) {
 			// goto('/auth');
-			notify(`You are not logged in, Please log in to continue this action`);
+			notify({title: `You are not logged in, Please log in to continue this action`, kind: 'warning'});
 			return;
 		}
 		loading = true;
@@ -22,7 +22,7 @@
 			})
 			.catch((e) => {
 				console.log(e)
-				notify({ title: `An error occured`, subtitle: e });
+				notify({ title: `Encountered an error attempting to create new post`, subtitle: e.response.data, kind: 'error' });
 			})
 			.finally(() => (loading = false));
 	};

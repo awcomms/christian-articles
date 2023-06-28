@@ -17,10 +17,16 @@
 		delete_loading = true;
 		await client_delete(data.id)
 			.then((r) => {
-				notify(`Post ${data.id} deleted`);
+				notify(`Post Successfully deleted`);
 				goto('/');
 			})
-			.catch((e) => notify(`An error occured: ${e}`))
+			.catch((e) =>
+				notify({
+					title: `Encountered an error attempting to delete ${data.id}`,
+					subtitle: e.response.data,
+					kind: 'error'
+				})
+			)
 			.finally(() => (delete_loading = false));
 	};
 
@@ -32,7 +38,7 @@
 				notify('Edit saved');
 			})
 			.catch((e) => {
-				notify({ title: `An error occured`, subtitle: e.reponse.data });
+				notify({ title: `Encountered an error attempting to save the edit`, subtitle: e.reponse.data, kind: 'error' });
 			})
 			.finally(() => (save_loading = false));
 	};

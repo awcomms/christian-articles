@@ -29,7 +29,7 @@
 </script>
 
 {#if $page.data.session?.user}
-	<Modal
+	<!-- <Modal
 		bind:open={select_open}
 		modalHeading="select_cta"
 		primaryButtonText="Reply"
@@ -46,7 +46,7 @@
 	</Modal>
 	<Modal bind:open={new_open} modalHeading={create_cta} passiveModal hasForm hasScrollingContent>
 		<Edit on:accept={({ detail }) => new_reply(detail)} />
-	</Modal>
+	</Modal> -->
 
 	<ButtonSet stacked>
 		<Button on:click={() => (select_open = true)}>{select_cta}</Button>

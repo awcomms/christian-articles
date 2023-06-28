@@ -146,7 +146,7 @@
 				icon={delete_loading ? InlineLoading : TrashCan}
 				on:click={() => dispatch('delete', post)}>Delete</Button
 			>
-			<Button disabled={loading} icon={View} href={`/post/${id}`}>View this item's page</Button>
+			<Button disabled={loading} icon={View} href={`/post/${id}`}>View this post's page</Button>
 		{/if}
 	</ButtonSet>
 </div>

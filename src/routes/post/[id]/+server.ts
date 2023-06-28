@@ -12,7 +12,7 @@ import { EscapedEmail } from '$lib/types';
 import { unauthorized_user_error } from '$lib/util/errors/unauthorized_user_error';
 import { allowed } from '$lib/util/redis/post/allowed';
 import { requires_payment } from '$lib/util/redis/post/requires_payment';
-import { get } from '$lib/util/redis';
+import { get } from '$lib/util/redis/get';
 
 export const GET: RequestHandler = async ({ params, url, locals }) => {
 	if (await requires_payment(params.id)) {
@@ -41,7 +41,7 @@ export const PUT: RequestHandler = async ({ request, locals, params }) => {
 			throw error(500, e);
 		}))
 	) {
-		throw error(404, `Item with id ${id} does not exist`);
+		throw error(404, `${id} does not exist`);
 	}
 	const root_id = await get_root_id(id).catch((e) => {
 		throw error(500, e);

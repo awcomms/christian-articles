@@ -7,6 +7,7 @@ import { is_user } from '$lib/util/redis/post/users/is_user';
 
 export const POST: RequestHandler = async ({ request, params, locals }) => {
 	const targets: RedisKey[] = await request.json();
+	console.log(targets, params.id);
 	const post = params.id;
 	const session = await locals.getSession();
 	if (!session?.user?.email) throw redirect(302, '/auth');
@@ -18,6 +19,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 		);
 
 	for (const target of targets) {
+		console.log(target)
 		if (!(await get<{allow_replies: boolean}>(target, ['$.allow_replies']).then((r) => r.allow_replies)))
 			if (!is_user(target, new EscapedEmail(session.user.email)))
 				throw error(

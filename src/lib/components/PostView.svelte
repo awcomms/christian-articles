@@ -25,7 +25,7 @@
 				if (navigate_on_delete) goto('/'); /**TODO goto previous page*/
 			})
 			.catch((e) =>
-				notify({ title: `Encountered an error attempting to delete item: ${id}`, subtitle: e })
+				notify({ title: `Encountered an error attempting to delete ${id}`, subtitle: e.response.data, kind: 'error' })
 			)}
 	{id}
 	name={post.name}

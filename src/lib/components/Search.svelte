@@ -8,17 +8,14 @@
 	import OnEnter from './OnEnter.svelte';
 	import { onMount } from 'svelte';
 	import type { Filters as _Filters } from '$lib/types/filter';
-	import Filters from './Filters.svelte';
 
 	export let select = false,
-		filters: _Filters = [],
-		show_filters = false,
-		selected: RedisKey[] = [];
+		posts: PostSearchDocument[] = [],
+		totalItems: number = 0,
+		filters: _Filters = [];
 	let loading = false,
 		search: string,
 		searched = false,
-		totalItems: number,
-		posts: PostSearchDocument[] = [],
 		page: number = 1;
 
 	$: get(page);
@@ -34,7 +31,7 @@
 			.post('/post/search', { search, page, filters })
 			.then((r) => ({ total: totalItems, documents: posts } = r.data))
 			.catch((e) => {
-				notify({ title: `An error occured`, subtitle: e });
+				notify({ title: `Encountered an error attempting to search for posts`, subtitle: e.response.data, kind: 'error' });
 			})
 			.finally(() => (loading = false));
 	};
@@ -42,13 +39,13 @@
 
 <OnEnter on:enter={() => get(page)} />
 
-{#if show_filters}
+<!-- {#if show_filters}
 	<Modal passiveModal>
 		<Filters />
 	</Modal>
-{/if}
+{/if} -->
 
-<Row>
+<Row noGutter>
 	<TextInput bind:ref={search_input_ref} bind:value={search} />
 	<Button size="field" on:click={() => get(page)} iconDescription="Search" icon={Search} />
 </Row>
@@ -58,10 +55,8 @@
 {:else if posts.length > 0}
 	<PostsPagination
 		on:select-click
-		bind:selected
 		{select}
 		{totalItems}
-		run_get={false}
 		on:update={({ detail }) => {
 			get(detail.page);
 		}}

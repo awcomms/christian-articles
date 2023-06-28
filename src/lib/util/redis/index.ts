@@ -12,8 +12,3 @@ export const client = createClient({
 
 await client.connect();
 await setup()
-
-export { exists } from './exists';
-export { get } from './get';
-export { json_array_index } from './json_array_index';
-export { object_value } from './object_value';

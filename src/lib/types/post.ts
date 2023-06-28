@@ -18,11 +18,21 @@ export interface UserPayment {
 	paid_for_once: boolean;
 }
 
-export type NumberBool = 0 | 1
+export type NumberBool = 0 | 1;
 
 export type PostEdit = Omit<EditablePost, 'payment' | 'allow_replies'> & Pick<Post, 'edit'>; //TODO-more precise on edit
 
-export type EditablePost = Omit<Post, 'id' | 'creator' | 'created' | 'updated'>;
+export type EditablePost = Pick<
+	Post,
+	| 'allow_replies'
+	| 'payment'
+	| 'alias'
+	| 'alias_plural'
+	| 'replies_description'
+	| 'replied_description'
+	| 'name'
+	| 'body'
+>;
 
 export interface Post {
 	id: RedisKey;
@@ -31,6 +41,7 @@ export interface Post {
 	updated: Date;
 	html?: string;
 	edit?: Edit;
+	selected?: boolean;
 	allow_replies: boolean;
 	payment: Payment;
 	alias: string;
@@ -41,7 +52,7 @@ export interface Post {
 	body: string;
 }
 
-export type PostSearchDocument = Document<PostItem>;
+export type PostSearchDocument = Document<PostItem> & Pick<Post, 'selected'>;
 export type PostItem = Pick<Post, 'name'>;
 
 export interface Edit {

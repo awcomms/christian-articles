@@ -17,17 +17,19 @@
 	// import { client_delete } from '$lib/util/client_del';
 
 	export let post: PostSearchDocument,
-		select = false,
-		selected = false;
+		select = false;
 
 	const dispatch = createEventDispatcher();
+	$: console.log(post.selected, post.id)
 </script>
 
 <div on:click on:keydown={() => dispatch('click')} class="post">
 	{#if select}
 		<Button
-			icon={selected ? CheckboxChecked : Checkbox}
-			on:click={() => dispatch('select-click', post.id)}
+			size='small'
+			kind='ghost'
+			icon={post.selected ? CheckboxChecked : Checkbox}
+			on:click={() => post.selected = !post.selected}
 		/>
 	{/if}
 	<div class="name">

@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let id: string, post: Post, should_pay: boolean, is_user: boolean;
 
-	import { Button, ButtonSet } from 'carbon-components-svelte';
+	import { Button, ButtonSet, Link } from 'carbon-components-svelte';
 	import PostView from './PostView.svelte';
 	import type { Post } from '$lib/types';
 
@@ -11,6 +11,9 @@
 
 <div>
 	<p>Created: {new Date(post.created).toLocaleString()}</p>
+	<Link href="/user/{post.creator}"
+		>Creator: {post.creator} (Click here to see more posts from them)</Link
+	>
 	{#if post.updated}
 		<p>Last Updated: {new Date(post.updated).toLocaleString()}</p>
 	{/if}

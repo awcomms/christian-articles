@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit';
 import { allowed } from '$lib/util/redis/post/allowed';
 import { EscapedEmail, type Post } from '$lib/types';
 import { is_user } from '$lib/util/redis/post/users/is_user';
-import { exists } from '$lib/util/redis';
+import { exists } from '$lib/util/redis/exists';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const session = await locals.getSession();

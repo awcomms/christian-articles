@@ -1,4 +1,4 @@
-import { get } from '$lib/util/redis';
+import { get } from '$lib/util/redis/get';
 import type { RedisKey } from '$lib/types';
 import { is_object } from '$lib/util/is_object';
 

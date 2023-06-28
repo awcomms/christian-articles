@@ -1,13 +1,11 @@
 <script lang="ts">
 	export let filter: { field: string; on: boolean; value: boolean },
-		filter_label = '',
-		value_label = '',
 		value_label_on = '',
 		value_label_off = '';
 	import { Toggle } from 'carbon-components-svelte';
 </script>
 
-<Toggle bind:toggled={filter.on} label={filter_label} />
+<Toggle bind:toggled={filter.on} />
 {#if filter.on}
 	<Toggle
 		disabled={!filter.on}
