@@ -37,7 +37,7 @@
 			callback: async (r: { reference: string }) => {
 				await axios
 					.post('/paystack/verify', r.reference)
-					.then((r) => dispatch('verified', r.data))
+					.then((r) => dispatch('verify', r.data))
 					.catch((e) => dispatch('error', e.response.data));
 			},
 			onClose: () => dispatch('close')

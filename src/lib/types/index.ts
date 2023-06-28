@@ -23,7 +23,7 @@ export type Email = string;
 export class EscapedEmail {
 	value: string;
 	constructor(email: string) {
-		this.value = escape_email(email);
+		this.value = 'user:' + escape_email(email);
 	}
 }
 

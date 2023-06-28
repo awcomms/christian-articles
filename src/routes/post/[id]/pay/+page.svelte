@@ -27,7 +27,7 @@
 	<Paystack
 		{metadata}
 		amount={data.cost || 0}
-		currency="NGN"
+		currency={data.currency}
 		on:verify={({ detail }) => {
 			if (detail) {
 				const url = data.self ? `/post/${data.id}` : `/post/${data.id}/replies`;

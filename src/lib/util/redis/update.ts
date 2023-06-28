@@ -15,7 +15,7 @@ const include = (prefix: string, obj: KeyedObject, accumulator: KeyedObject) => 
 };
 
 export const update = async ({ id, data }: { id: string; data: KeyedObject }) => {
-	if (!is_object) client.json.set(id, '$', data);
+	if (!is_object(data)) client.json.set(id, '$', data);
 	const sanitized_data = sanitize_object(data);
 	const values: KeyedObject = {
 		'$.embedding': await embedding(JSON.stringify(sanitized_data))
