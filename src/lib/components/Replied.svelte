@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { page } from '$app/stores';
 	import type { Post, PostSearchDocument, RedisKey } from '$lib/types';
 	import { Button, ButtonSet, InlineLoading, Modal } from 'carbon-components-svelte';
@@ -29,7 +29,7 @@
 </script>
 
 {#if $page.data.session?.user}
-	<!-- <Modal
+	<Modal
 		bind:open={select_open}
 		modalHeading="select_cta"
 		primaryButtonText="Reply"
@@ -46,7 +46,7 @@
 	</Modal>
 	<Modal bind:open={new_open} modalHeading={create_cta} passiveModal hasForm hasScrollingContent>
 		<Edit on:accept={({ detail }) => new_reply(detail)} />
-	</Modal> -->
+	</Modal>
 
 	<ButtonSet stacked>
 		<Button on:click={() => (select_open = true)}>{select_cta}</Button>
@@ -54,4 +54,4 @@
 	</ButtonSet>
 {/if}
 
-<Context {posts} {totalItems} />
+<Context {posts} {totalItems} /> -->
