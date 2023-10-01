@@ -2,13 +2,21 @@ import { posts_index_name } from '$lib/constants';
 import { SchemaFieldTypes, VectorAlgorithms } from 'redis';
 import { client } from '.';
 
+// interface Error {
+// 	message: string
+// }
+
 export const setup = async () => {
 	try {
 		await client.ft.info(posts_index_name); // TODO-more-reliable
 	} catch (e) {
 		if (e.message === 'Unknown Index name') {
 			try {
-				// await client.ft.dropIndex(posts_index_name);
+				try {
+					await client.ft.dropIndex(posts_index_name);
+				} catch {
+					('haha no index go brr');
+				}
 				await client.ft.create(
 					posts_index_name,
 					{
@@ -39,10 +47,18 @@ export const setup = async () => {
 							type: SchemaFieldTypes.TAG,
 							SEPARATOR: ';'
 						},
+						'$._replies': {
+							AS: 'replies',
+							type: SchemaFieldTypes.TEXT
+						},
 						'$.replied': {
 							AS: 'replied.*',
 							type: SchemaFieldTypes.TAG,
 							SEPARATOR: ';'
+						},
+						'$._replied': {
+							AS: 'replied',
+							type: SchemaFieldTypes.TEXT
 						},
 						'$.id': {
 							AS: 'id',

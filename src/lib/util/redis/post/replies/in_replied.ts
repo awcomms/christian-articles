@@ -1,4 +1,4 @@
-import { object_value } from '$lib/util/redis/object_value';
 import type { RedisKey } from '$lib/types';
+import { json_array_index } from '../../json_array_index';
 export const in_replied = ({ post, target }: { post: RedisKey; target: RedisKey }) =>
-	object_value<string>(post, 'replied', target);
+	json_array_index(target, 'replies', post) ?? undefined;

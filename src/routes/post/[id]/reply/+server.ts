@@ -27,6 +27,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 					`You may not reply to specified post ${target}, for it does not allow replies,and you do not own it, neither are you a contributor`
 				);
 
+		console.dir({post, target})
 		await reply({ post, target });
 	}
 	return new Response(null, { status: 202 });

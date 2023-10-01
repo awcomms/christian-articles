@@ -33,6 +33,7 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 
 	console.log(filters)
 	if (filters && filters.length) {
+		query += '('
 		filters.forEach((filter) => {
 			switch (filter.type) {
 				case 'tag':
@@ -50,6 +51,7 @@ export const search = async ({ index, page, filters, count, search, RETURN }: Se
 					query += ` @${filter.field}:(${filter.value})`;
 			}
 		});
+		query += ')'
 		extra_args = ' HYBRID_POLICY ADHOC_BF';
 	} else {
 		query = '*';

@@ -20,14 +20,14 @@
 </div>
 
 <ButtonSet stacked>
-	{#if should_pay && post.payment}
+	<!-- {#if should_pay && post.payment}
 		<Button href="/post/{id}/pay"
 			>Pay {post.payment.cost}NGN to access {replies_description || 'Parent articles'}
 		</Button>
 	{:else}
 		<Button href="/post/{id}/replies">{replies_description || 'Child articles'}</Button>
 	{/if}
-	<Button href="/post/{id}/replied">{replied_description}</Button>
+	<Button href="/post/{id}/replied">{replied_description}</Button> -->
 	<Button href="/post/{id}/similar">Similar posts</Button>
 </ButtonSet>
 

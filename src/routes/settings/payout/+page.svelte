@@ -45,7 +45,7 @@
 	const update = async () => {
 		update_loading = true;
 		await axios
-			.post('/settings/payout', { email: data.email, data: {name, number, bank, currency} })
+			.post('/settings/payout', { data: {name, number, bank, currency} })
 			.then(() => notify('User payout details updated Successfully'))
 			.catch((e) => {
 				let notification: ToastNotificationProps = { title: 'We encountered an error attempting to update user payout details'};
@@ -76,8 +76,10 @@
 				</Select>
 			{/if}
 
-			<TextInput bind:value={name} labelText="Account Name" />
-			<TextInput bind:value={number} labelText="Account Number" />
+			<!-- <TextInput bind:value={name} labelText="Account Name" /> -->
+			{#if currency && bank}
+				<TextInput bind:value={number} labelText="Account Number" />
+			{/if}
 		</div>
 		<Button icon={update_loading ? InlineLoading : Save} on:click={update}>Update payout settings</Button>
 	</Column>
