@@ -43,26 +43,12 @@ export const setup = async () => {
 							SORTABLE: true
 						},
 						'$.replies': {
-							AS: 'replies.*',
-							type: SchemaFieldTypes.TAG,
-							SEPARATOR: ';'
-						},
-						'$._replies': {
 							AS: 'replies',
-							type: SchemaFieldTypes.TEXT
+							type: SchemaFieldTypes.TAG
 						},
 						'$.replied': {
-							AS: 'replied.*',
-							type: SchemaFieldTypes.TAG,
-							SEPARATOR: ';'
-						},
-						'$._replied': {
 							AS: 'replied',
-							type: SchemaFieldTypes.TEXT
-						},
-						'$.id': {
-							AS: 'id',
-							type: SchemaFieldTypes.TEXT
+							type: SchemaFieldTypes.TAG
 						},
 						'$.created': {
 							AS: 'created',
@@ -92,27 +78,28 @@ export const setup = async () => {
 						},
 						'$.allow_replies': {
 							AS: 'allow_replies',
-							type: SchemaFieldTypes.TAG,
+							type: SchemaFieldTypes.TEXT,
 							SORTABLE: true
 						},
 						'$.allow_user_replies': {
 							AS: 'allow_user_replies',
-							type: SchemaFieldTypes.TAG,
+							type: SchemaFieldTypes.TEXT,
 							SORTABLE: true
 						},
 						'$.allow_self_replies': {
 							AS: 'allow_self_replies',
-							type: SchemaFieldTypes.TAG,
+							type: SchemaFieldTypes.TEXT,
 							SORTABLE: true
 						},
 						'$.private': {
 							AS: 'private',
-							type: SchemaFieldTypes.TAG,
+							type: SchemaFieldTypes.TEXT,
 							SORTABLE: true
 						}
 					},
 					{
 						ON: 'JSON',
+						NOHL: true,
 						PREFIX: posts_index_name
 					}
 				);

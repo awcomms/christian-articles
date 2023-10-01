@@ -1,5 +1,5 @@
 import type { EscapedEmail, RedisKey } from '$lib/types';
-import { object_value } from '$lib/util/redis/object_value';
+import { client } from '../..';
 
-export const is_user = async (id: RedisKey, email: EscapedEmail): Promise<boolean> =>
-	await object_value<string>(id, 'users', email.value) ? true : false;
+export const is_user = async (id: RedisKey, email: EscapedEmail) =>
+	client.json.arrIndex(id, 'users', email.value) ?? undefined

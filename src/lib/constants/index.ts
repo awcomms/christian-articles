@@ -1,4 +1,5 @@
 export const user_index = 'users';
+export const user_id_prefix = 'user_';
 export const items_per_page = 7;
 export const replies_index_name = 'replies';
 export const replied_index_name = 'replied';
